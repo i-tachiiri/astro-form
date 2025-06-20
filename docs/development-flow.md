@@ -2,10 +2,18 @@
 
 ### 1. feat: 開発環境の整備
 
+
+
+
 - docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
-- Github Actions に `test-and-build.yml`（ビルド & テスト）を配置する
+- `dotnet test`が通る事を確認
+- Github Actions に `test-and-build.yml`（ビルド & テスト）を配置
+- nektos/actでテストが通るか確認
 -  `.editorconfig` を追加し `dotnet format` が通る設定を確定
+ - `dotnet format`で差分がない事を確認 
 - Serilog を導入し、`Console.WriteLine` を禁止する CA ルールを有効化
+- `dotnet build`が通る事を確認
+- 
 
 ### 2. infra: Azure環境の整備
 
