@@ -26,9 +26,3 @@
     - `dotnet test`
     - `dotnet format`
   - `nektos/act` を使用し、GitHub Actions のジョブがローカルでも成功することを確認する：
-
-    ```bash
-    act -j <ジョブ名> --container-architecture linux/amd64 \
-      -P ubuntu-latest=catthehacker/ubuntu:act-latest
-    ```
-    ※ `-j <ジョブ名>` の `<ジョブ名>` は `.github/workflows/*.yml` の `jobs.<name>` に対応
