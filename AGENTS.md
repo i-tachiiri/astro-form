@@ -28,10 +28,9 @@
 | -- | ---------------------------------------------------------------------------------------------- |
 | S1 | `dotnet build` & `dotnet test` が Windows / macOS / Linux（GitHub Actions）で成功する。                 |
 | S2 | `deploy-infra.yml` で **Static Web Apps・Blob Storage・Key Vault・Cosmos DB** がダミー RG へデプロイ成功。     |
-| S3 | デスクトップアプリがオフライン動作し `logs/log-YYYYMMDD.txt` を出力、SQLite → Cosmos DB へ CRUD 同期できる。                |
-| S4 | `BackupService --sync` がローカル **Azurite + Cosmos Emulator** に JSON / Doc を POST し *200 OK* を取得。 |
-| S5 | `release-desktop.yml` が署名済みインストーラを生成し、Blob `$web/updates` へアップロード。                             |
-| S6 | Static Web Apps 環境でフロントエンドがビルドされ、**Functions 経由で Key Vault シークレット取得 & Cosmos DB 読み書き**が確認できる。  |
+| S3 | `BackupService --sync` がローカル **Azurite + Cosmos Emulator** に JSON / Doc を POST し *200 OK* を取得。 |
+| S4 | `release-desktop.yml` が署名済みインストーラを生成し、Blob `$web/updates` へアップロード。                             |
+| S5 | Static Web Apps 環境でフロントエンドがビルドされ、**Functions 経由で Key Vault シークレット取得 & Cosmos DB 読み書き**が確認できる。  |
 
 ---
 
