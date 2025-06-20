@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  cosmos:
+    image: mcr.microsoft.com/cosmosdb/linux/azure-cosmos-emulator
+    container_name: cosmos
+    tty: true
+    ports:
+      - "8081:8081"
+      - "10251:10251"
+      - "10252:10252"
+      - "10253:10253"
+      - "10254:10254"
+    environment:
+      AZURE_COSMOS_EMULATOR_PARTITION_COUNT: 3
+      AZURE_COSMOS_EMULATOR_ENABLE_DATA_PERSISTENCE: "true"
+    volumes:
+      - cosmos-data:/data
+    networks:
+      - localnet
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite
+    container_name: azurite
+    command: "azurite-blob --blobHost 0.0.0.0"
+    ports:
+      - "10000:10000"
+    volumes:
+      - azurite-data:/data
+    networks:
+      - localnet
+
+  swa:
+    image: ghcr.io/azure/static-web-apps-cli
+    container_name: swa
+    ports:
+      - "4280:4280"
+    volumes:
+      - ./src/Presentation.Client:/app
+    command: >-
+      swa start http://localhost:7071 --api ./src/Api --port 4280
+    depends_on:
+      - azurite
+      - cosmos
+    networks:
+      - localnet
+
+volumes:
+  cosmos-data:
+  azurite-data:
+
+networks:
+  localnet:
