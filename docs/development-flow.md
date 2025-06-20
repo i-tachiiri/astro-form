@@ -1,6 +1,6 @@
 ## 実装
 
-各実装において各テスト項目を実施する。
+各実装において各テスト項目の実施と、`docs/ai-review.md`へのよりスムーズな実装のための指示改善提案の記載を行う。
 
 - `docs/architectures/application-design.md` を参照し、各プロジェクトとサンプル UnitTest を追加する
 - `docs/ci.md` を参照し、ymlファイルを配置
