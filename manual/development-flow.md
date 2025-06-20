@@ -6,6 +6,7 @@
   - `docs/ci.md` を参照し、ymlファイルを配置
   - `docs/development-guideline.md` を参照し、Serilogや.editorconfigを設定
   - `docs/architectures/application-design.md` を参照し、各プロジェクトとサンプル UnitTest を追加する
+    - UnitTestにはSmokeTestを追加し、起動時の例外が出ないかチェックできるようにしてください
     - Blazorのプロジェクトにはiconやfaviconのpngが含まれるが、バイナリがあるとPRが作成できないのでSVG等に置き換えて対応
 - 下記を実施し、開発環境を整えて下さい。
   - `docs/azure-setup.md` を参照し、Bicep/ARM でサービスを定義
