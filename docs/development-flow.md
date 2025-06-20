@@ -13,18 +13,8 @@
  - `dotnet format`で差分がない事を確認 
 - Serilog を導入し、`Console.WriteLine` を禁止する CA ルールを有効化
 - `dotnet build`が通る事を確認
-- 
+- docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
 
-### 2. infra: Azure環境の整備
-
-* `infra/` に Bicep/ARM で以下を定義：
-
-  * Static Web Apps
-  * Azure Functions
-  * Blob Storage
-  * Key Vault
-  * Cosmos DB (Free Tier)
-* `deploy-infra.yml` により Dry-Run／Deploy を自動化。
 
 ### 3. dev: Docker環境の整備
 
