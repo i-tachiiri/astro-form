@@ -1,3 +1,10 @@
+
+## スキーマ実装方針
+
+* 値オブジェクト + ファクトリパターンを適用。
+* `Infra/Cosmos/` に `ICosmosRepository<T>` + 各具体リポジトリを実装し DI 登録。
+
+## スキーマ詳細
 ```csharp
 using System;
 using System.Collections.Generic;
