@@ -8,7 +8,7 @@
 
 ## 1. ミッション
 
-*Avalonia Desktop* & **Azure 静的アプリ + Functions** スタック（Static Web Apps, Blob Storage, Key Vault, Cosmos DB）で構成された プロジェクト群を作成し、機能／非機能要件をすべて満たしながら月額コストを抑える。
+**Azure 静的アプリ + Functions** スタック（Static Web Apps, Blob Storage, Key Vault, Cosmos DB）で構成された プロジェクト群を作成し、機能／非機能要件をすべて満たしながら月額コストを抑える。
 
 ---
 
