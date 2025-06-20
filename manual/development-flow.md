@@ -27,3 +27,5 @@
     - `dotnet build`
     - `dotnet test`
     - `dotnet format`
+
+人間側の指示や仕様の改善点や不足をdocs/ai-review.mdに記載してください。
