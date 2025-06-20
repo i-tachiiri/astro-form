@@ -1,4 +1,4 @@
-﻿namespace AstroForm.Infra;
+namespace AstroForm.Infra;
 
 public class Class1
 {

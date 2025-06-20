@@ -1,0 +1,4 @@
+M:System.Console.WriteLine(System.String)
+M:System.Console.WriteLine(System.String,System.Object[])
+M:System.Console.Write(System.String)
+M:System.Console.Write(System.String,System.Object[])

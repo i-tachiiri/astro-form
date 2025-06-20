@@ -1,5 +1,6 @@
-using Serilog;
 using AstroForm.Domain;
+
+using Serilog;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
