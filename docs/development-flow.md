@@ -6,7 +6,7 @@
 
 
 - docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
-- Github Actions に `test-and-build.yml`（ビルド & テスト）を配置
+- docs/ci.md を参照し、ymlファイルを配置
 -  `.editorconfig` を追加し `dotnet format` が通る設定を確定
 - Serilog を導入し、`Console.WriteLine` を禁止する CA ルールを有効化
 - docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
