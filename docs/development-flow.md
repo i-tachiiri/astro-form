@@ -1,9 +1,6 @@
-## ✅ 改訂版タスク一覧（全画面 UI 実装指示）
+## 実装
 
-### 1. feat: 開発環境の整備
-
-
-
+各実装において各テスト項目を実施する。
 
 - `docs/architectures/application-design.md` を参照し、各プロジェクトとサンプル UnitTest を追加する
 - `docs/ci.md` を参照し、ymlファイルを配置
@@ -15,27 +12,9 @@
 - `docs/api-spec.md` と`docs/architectures/application-design.md` に基づいてAzure functionsのAPIを実装
 - `docs/ui-design.md` に記載のある全画面を作成。コンポーネントは`docs/components.md` に基づく
 
+## テスト項目
+
 - `dotnet test`が通る事を確認
 - nektos/actでテストが通るか確認
  - `dotnet format`で差分がない事を確認
 - `dotnet build`が通る事を確認
-
-
-
-
-
-### 9. ci: カバレッジとPRルール
-
-* `coverlet` により 70% 行カバレッジを必須化。
-* PR テンプレートで `AGENTS.md §6` のチェックリストを自動適用。
-
-### 10. docs: ドキュメント整合性確認
-
-* `/docs` 配下の以下ドキュメントを実装に合わせて更新：
-
-  * `ui-design.md`
-  * `components.md`
-  * `data-design.md`
-  * `entities.md`
-  * `security.md`
-* `README.md` に clone → build → swa start → sync の手順と CI/CD バッジを追記。
