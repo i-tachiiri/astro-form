@@ -12,8 +12,8 @@
 - `docs/docker-setup.md` を参照し、docker関連のセットアップを行う
 - `docs/data-design.md` を参照し、スキーマを作成
 - `docs/entities.md` を参照し、ドメイン層を設計する
+- `docs/api-spec.md` と`docs/architectures/application-design.md` に基づいてAzure functionsのAPIを実装
 - `docs/ui-design.md` に記載のある全画面を作成。コンポーネントは`docs/components.md` に基づく
-- 
 
 - `dotnet test`が通る事を確認
 - nektos/actでテストが通るか確認
@@ -23,28 +23,6 @@
 
 
 
-
-### 6. feat: ドメイン & データ層設計
-
-
-
-### 7. feat: Functions API
-
-* CRUD エンドポイントを用意：
-
-  * `/forms`
-  * `/questions`
-  * `/answers`
-  * `/users`
-  * `/logs`
-* Key Vault から Cosmos 接続文字列取得。
-* Swashbuckle により OpenAPI `/openapi.json` を公開。
-
-### 8. feat: BackupService --sync
-
-* ローカル JSON → Cosmos Emulator へ書き込み。
-* Azurite にファイル同期。
-* xUnit + Verify によるレスポンススナップショットテストを実装。
 
 ### 9. ci: カバレッジとPRルール
 
