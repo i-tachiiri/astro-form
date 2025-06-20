@@ -18,14 +18,12 @@
   - `docs/api-spec.md` と`docs/architectures/application-design.md` に基づいてAzure functionsのAPIを実装
   - `docs/ui-design.md` に記載のある全画面を作成。コンポーネントは`docs/components.md` に基づく
 - 下記を実施し、現在の実装と、ユースケースや要求との差異が発生していれば修正してください。
-  - `docs/use-cases.md` を参照し、現在の実装の不足分を実現できるよう設定を行う
-  - `docs/requirements.md` を参照し、要求を実現できているか確認する
+  - `docs/use-cases.md` を参照し、未実装の部分を`docs/ai-review.md` に記載してください
+  - `docs/requirements.md` を参照し、要求を満たしていない部分を`docs/ai-review.md` に記載してください
 
 ## テスト
 
-  - 以下のコマンドでビルド・テスト・コードフォーマットを実行し、ローカル環境で問題がないことを確認してください
-    - `dotnet build`
-    - `dotnet test`
-    - `dotnet format`
-
-人間側の指示や仕様の改善点や不足をdocs/ai-review.mdに記載してください。
+- 以下のコマンドでビルド・テスト・コードフォーマットを実行し、ローカル環境で問題がないことを確認してください
+  - `dotnet build`
+  - `dotnet test`
+  - `dotnet format`
