@@ -27,4 +27,3 @@
     - `dotnet build`
     - `dotnet test`
     - `dotnet format`
-  - `nektos/act` を使用し、GitHub Actions のジョブがローカルでも成功することを確認する：
