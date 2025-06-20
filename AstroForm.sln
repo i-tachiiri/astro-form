@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{E54C7977-D4BC-4329-8C88-C156E68DDD81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroForm.Domain", "src\AstroForm.Domain\AstroForm.Domain.csproj", "{2E785830-9FD2-432D-8F13-7135193E7C60}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroForm.Infra", "src\AstroForm.Infra\AstroForm.Infra.csproj", "{3C4CDA1A-91A7-4863-A5D1-CA2364C60591}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroForm.Presentation", "src\AstroForm.Presentation\AstroForm.Presentation.csproj", "{F6431105-5147-4213-8DEE-2715FCAA4E96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{28F5948F-4F3E-45A2-95A6-8040269722F8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroForm.UnitTests", "tests\AstroForm.UnitTests\AstroForm.UnitTests.csproj", "{E1D9D85C-9681-492A-941B-70F632A861C0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E785830-9FD2-432D-8F13-7135193E7C60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E785830-9FD2-432D-8F13-7135193E7C60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E785830-9FD2-432D-8F13-7135193E7C60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E785830-9FD2-432D-8F13-7135193E7C60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C4CDA1A-91A7-4863-A5D1-CA2364C60591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4CDA1A-91A7-4863-A5D1-CA2364C60591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4CDA1A-91A7-4863-A5D1-CA2364C60591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4CDA1A-91A7-4863-A5D1-CA2364C60591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6431105-5147-4213-8DEE-2715FCAA4E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6431105-5147-4213-8DEE-2715FCAA4E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6431105-5147-4213-8DEE-2715FCAA4E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6431105-5147-4213-8DEE-2715FCAA4E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1D9D85C-9681-492A-941B-70F632A861C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1D9D85C-9681-492A-941B-70F632A861C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1D9D85C-9681-492A-941B-70F632A861C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1D9D85C-9681-492A-941B-70F632A861C0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2E785830-9FD2-432D-8F13-7135193E7C60} = {E54C7977-D4BC-4329-8C88-C156E68DDD81}
+		{3C4CDA1A-91A7-4863-A5D1-CA2364C60591} = {E54C7977-D4BC-4329-8C88-C156E68DDD81}
+		{F6431105-5147-4213-8DEE-2715FCAA4E96} = {E54C7977-D4BC-4329-8C88-C156E68DDD81}
+		{E1D9D85C-9681-492A-941B-70F632A861C0} = {28F5948F-4F3E-45A2-95A6-8040269722F8}
+	EndGlobalSection
+EndGlobal
