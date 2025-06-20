@@ -6,48 +6,22 @@
 
 
 - docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
-- `dotnet test`が通る事を確認
 - Github Actions に `test-and-build.yml`（ビルド & テスト）を配置
-- nektos/actでテストが通るか確認
 -  `.editorconfig` を追加し `dotnet format` が通る設定を確定
- - `dotnet format`で差分がない事を確認 
 - Serilog を導入し、`Console.WriteLine` を禁止する CA ルールを有効化
-- `dotnet build`が通る事を確認
 - docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
+- docs/docker-setup.md を参照し、docker関連のセットアップを行う
+- `docs/ui-design.md` に記載のある全画面を作成。コンポーネントは`docs/components.md` に基づく
+- 
+
+- `dotnet test`が通る事を確認
+- nektos/actでテストが通るか確認
+ - `dotnet format`で差分がない事を確認
+- `dotnet build`が通る事を確認
 
 
-### 3. dev: Docker環境の整備
 
-* `docker-compose.yml` を作成し、以下を一括起動：
 
-  * Azurite
-  * Cosmos Emulator
-  * SWA CLI
-* `README.md` に起動手順を追記。
-* `BackupService` に `/api/echo` エンドポイントを実装（200 OK + ペイロードを返す）。
-
-### 5. feat: UI スキャフォールド（全13画面）
-
-`docs/ui-design.md` と `docs/components.md` に基づき、以下のルートを実装：
-
-| 画面ID | ルート例                 | 主な機能                              |
-| ---- | -------------------- | --------------------------------- |
-| S01  | `/login`             | Microsoft Entra External ID サインイン |
-| S02  | `/forms`             | フォーム一覧・検索・新規作成                    |
-| S03  | `/forms/:id/edit`    | フォーム設定 + 質問設計 + 公開                |
-| S04  | `/forms/:id/preview` | HTML 生成プレビュー                      |
-| S05  | `/thank-you`         | サンクスページ（または外部 URL）                |
-| S06  | `/logs`              | ログ閲覧・フィルタ                         |
-| S07  | `/account`           | プロフィール・ポリシー表示                     |
-| S08  | `/privacy`           | 静的プライバシーポリシー                      |
-| S09  | `/account/delete`    | アカウント削除確認                         |
-| S10  | `/good-bye`          | アカウント削除後                          |
-| S11  | `/answers`           | 回答結果の確認・CSV 出力                    |
-| S12  | `/contact`           | 問い合わせフォームの編集                      |
-| S13  | `/p/:slug`           | 一般公開フォーム表示                        |
-
-* TailwindCSS + A11y AA テーマ適用。
-* 共通 UI コンポーネントは `docs/components.md` に従って構築。
 
 ### 6. feat: ドメイン & データ層設計
 
