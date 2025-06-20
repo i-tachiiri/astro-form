@@ -3,9 +3,10 @@
 各実装において各テスト項目の実施と、`docs/ai-review.md`へのよりスムーズな実装のための指示改善提案の記載を行う。
 
 - 下記を実施し、プロジェクトのひな形を作成してください。
-  - `docs/architectures/application-design.md` を参照し、各プロジェクトとサンプル UnitTest を追加する
   - `docs/ci.md` を参照し、ymlファイルを配置
   - `docs/development-guideline.md` を参照し、Serilogや.editorconfigを設定
+  - `docs/architectures/application-design.md` を参照し、各プロジェクトとサンプル UnitTest を追加する
+    - Blazorのプロジェクトにはiconやfaviconのpngが含まれるが、バイナリがあるとPRが作成できないのでSVG等に置き換えて対応
 - 下記を実施し、開発環境を整えて下さい。
   - `docs/azure-setup.md` を参照し、Bicep/ARM でサービスを定義
   - `docs/docker-setup.md` を参照し、docker関連のセットアップを行う
@@ -21,7 +22,7 @@
 
 ## テスト
 
-  - 以下のコマンドでビルド・テスト・コードフォーマットを実行し、ローカル環境で問題がないことを確認する：
+  - 以下のコマンドでビルド・テスト・コードフォーマットを実行し、ローカル環境で問題がないことを確認してください
     - `dotnet build`
     - `dotnet test`
     - `dotnet format`
