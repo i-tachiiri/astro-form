@@ -12,6 +12,7 @@
 - `docs/api-spec.md` と`docs/architectures/application-design.md` に基づいてAzure functionsのAPIを実装
 - `docs/ui-design.md` に記載のある全画面を作成。コンポーネントは`docs/components.md` に基づく
 - `docs/use-cases.md` を参照し、現在の実装の不足分を実現できるよう設定を行う
+- `docs/requirements.md` を参照し、要求を実現できているか確認する
 
 ## テスト項目
 
