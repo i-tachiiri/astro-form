@@ -5,13 +5,13 @@
 
 
 
-- docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
-- docs/ci.md を参照し、ymlファイルを配置
-- docs/development-guideline.md を参照し、Serilogや.editorconfigを設定
-- docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
-- docs/docker-setup.md を参照し、docker関連のセットアップを行う
-- docs/data-design.md を参照し、スキーマを作成
-- docs/entities.md を参照し、ドメイン層を設計する
+- `docs/architectures/application-design.md` を参照し、各プロジェクトとサンプル UnitTest を追加する
+- `docs/ci.md` を参照し、ymlファイルを配置
+- `docs/development-guideline.md` を参照し、Serilogや.editorconfigを設定
+- `docs/azure-setup.md` を参照し、Bicep/ARM でサービスを定義
+- `docs/docker-setup.md` を参照し、docker関連のセットアップを行う
+- `docs/data-design.md` を参照し、スキーマを作成
+- `docs/entities.md` を参照し、ドメイン層を設計する
 - `docs/ui-design.md` に記載のある全画面を作成。コンポーネントは`docs/components.md` に基づく
 - 
 
