@@ -1,0 +1,21 @@
+{
+  "database": "astroform-db",
+  "containers": [
+    {
+      "name": "Users",
+      "partitionKey": "/id"
+    },
+    {
+      "name": "Forms",
+      "partitionKey": "/userId"
+    },
+    {
+      "name": "FormSubmissions",
+      "partitionKey": "/formId"
+    },
+    {
+      "name": "ActivityLogs",
+      "partitionKey": "/partitionKey"
+    }
+  ]
+}
