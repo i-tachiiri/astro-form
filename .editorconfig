@@ -9,4 +9,5 @@ csharp_new_line_before_open_brace = all
 
 # treat warnings as errors
 warn_as_error = true
+dotnet_diagnostic.CA1303.severity = error
 

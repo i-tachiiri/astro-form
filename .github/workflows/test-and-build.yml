@@ -18,7 +18,7 @@ jobs:
       - name: Restore
         run: dotnet restore src/AstroForm.sln
       - name: Format Check
-        run: dotnet format --verify-no-changes
+        run: dotnet format src/AstroForm.sln --verify-no-changes
       - name: Build
         run: dotnet build src/AstroForm.sln --configuration Release --no-restore
       - name: Test
