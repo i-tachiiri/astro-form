@@ -1,1 +1,10 @@
-<button class="save-button">Save</button>
+<button class="save-button" @onclick="OnClick">Save</button>
+
+@code {
+    [Inject] public FormEditorService Service { get; set; } = default!;
+
+    private async Task OnClick()
+    {
+        await Service.SaveAsync();
+    }
+}

@@ -6,6 +6,8 @@ using AstroForm.Application;
 using AstroForm.Domain.Services;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +41,14 @@ builder.Services.AddSingleton<FormAnswerService>();
 builder.Services.AddSingleton<ActivityLogService>();
 builder.Services.AddSingleton<UserService>();
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = builder.Configuration["AzureAd:Authority"];
+        options.Audience = builder.Configuration["AzureAd:ClientId"];
+    });
+builder.Services.AddAuthorization();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -49,6 +59,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/forms/{id}", async (Guid id, IFormRepository repo) =>
 {
@@ -118,11 +131,16 @@ app.MapGet("/logviewer", async context =>
     await context.Response.SendFileAsync(path);
 });
 
-app.MapPost("/users/register", async (UserRegistration req, UserService service) =>
+app.MapPost("/users/register", async (UserRegistration req, ClaimsPrincipal principal, UserService service) =>
 {
+    var oid = principal.FindFirstValue("oid") ?? principal.FindFirstValue(ClaimTypes.NameIdentifier);
+    if (oid is null || oid != req.Id)
+    {
+        return Results.Unauthorized();
+    }
     var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email, req.ConsentGivenAt);
     return Results.Ok(user);
-});
+}).RequireAuthorization();
 app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) =>
 {
     await service.UpdateRoleAsync(id, req.Role);
