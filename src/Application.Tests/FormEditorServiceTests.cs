@@ -47,5 +47,15 @@ namespace AstroForm.Tests
             var saved = await repo.GetByIdAsync(service.CurrentForm.Id);
             Assert.Equal("auto", saved?.Name);
         }
+
+        [Fact]
+        public void Constructor_AddsDefaultItems()
+        {
+            var repo = new InMemoryFormRepository();
+            using var service = new FormEditorService(repo);
+
+            Assert.Equal(8, service.CurrentForm.FormItems.Count);
+            Assert.All(service.CurrentForm.FormItems, i => Assert.True(i.IsDefault));
+        }
     }
 }

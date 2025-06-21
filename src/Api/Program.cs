@@ -60,10 +60,11 @@ app.MapGet("/forms/{id}/answers", async (Guid id, FormAnswerService service) =>
     return answers.Count == 0 ? Results.NotFound() : Results.Ok(answers);
 });
 
-app.MapPost("/forms/{id}/save", async (Guid id, Form form, IFormRepository repo) =>
+app.MapPost("/forms/{id}/save", async (Guid id, Form form, IFormRepository repo, ActivityLogService logs) =>
 {
     form.Id = id;
     await repo.SaveAsync(form);
+    await logs.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "SaveForm" });
     return Results.Ok(form);
 });
 
@@ -74,11 +75,12 @@ app.MapPost("/forms/{id}/preview", async (Guid id, Form form, FormPublishService
     return Results.Ok(new { path });
 });
 
-app.MapPost("/forms/{id}/publish", async (Guid id, Form form, IFormRepository repo, FormPublishService publisher) =>
+app.MapPost("/forms/{id}/publish", async (Guid id, Form form, IFormRepository repo, FormPublishService publisher, ActivityLogService logs) =>
 {
     form.Id = id;
     var path = await publisher.PublishAsync(form);
     await repo.SaveAsync(form);
+    await logs.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "PublishForm" });
     return Results.Ok(new { path });
 });
 
