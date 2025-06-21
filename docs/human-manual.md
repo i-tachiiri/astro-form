@@ -1,18 +1,20 @@
 下記を実施し、プロジェクトのひな形を作成してください。
 - docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
 - docs/ci.md を参照し、ymlファイルを配置
-docs/development-guideline.md を参照し、Serilogや.editorconfigを設定
+- docs/development-guideline.md を参照し、Serilogや.editorconfigを設定
+  
 下記を実施し、開発環境を整えて下さい。
-docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
-docs/docker-setup.md を参照し、docker関連のセットアップを行う
+- docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
+- docs/docker-setup.md を参照し、docker関連のセットアップを行う
+  
 下記を実施し、データ設計を行ってください。
-docs/data-design.md を参照し、スキーマを作成
-docs/entities.md を参照し、ドメイン層を設計する
+- docs/data-design.md を参照し、スキーマを作成
+- docs/entities.md を参照し、ドメイン層を設計する
+  
 下記を実施し、Azure functionsの実装を行ってください。
-docs/api-spec.md とdocs/architectures/application-design.md に基づいてAzure functionsのAPIを実装
-docs/ui-design.md に記載のある全画面を作成。コンポーネントはdocs/components.md に基づく
+- docs/api-spec.md とdocs/architectures/application-design.md に基づいてAzure functionsのAPIを実装
+- docs/ui-design.md に記載のある全画面を作成。コンポーネントはdocs/components.md に基づく
+  
 下記を実施し、現在の実装と、ユースケースや要求との差異が発生していれば修正してください。
-docs/use-cases.md を参照し、現在の実装の不足分を実現できるよう設定を行う
-docs/requirements.md を参照し、要求を実現できているか確認する
-docs/use-cases.md を参照し、現在の実装の不足分をdocs/ai-review.mdに記載
-docs/requirements.md を参照し、要求に対する不足をdocs/ai-review.mdに記載
+- docs/use-cases.md を参照し、現在の実装の不足分をdocs/ai-review.mdに記載
+- docs/requirements.md を参照し、要求に対する不足をdocs/ai-review.mdに記載
