@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AstroForm.Domain.Entities;
 using AstroForm.Domain.Repositories;
@@ -20,6 +22,15 @@ namespace AstroForm.Infra
         {
             _store[form.Id] = form;
             return Task.CompletedTask;
+        }
+
+        public Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId)
+        {
+            if (_store.TryGetValue(formId, out var form))
+            {
+                return Task.FromResult((IReadOnlyList<FormSubmission>)form.FormSubmissions.ToList());
+            }
+            return Task.FromResult((IReadOnlyList<FormSubmission>)new List<FormSubmission>());
         }
     }
 }

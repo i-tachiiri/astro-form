@@ -8,5 +8,6 @@ namespace AstroForm.Domain.Repositories
     {
         Task<Form?> GetByIdAsync(Guid id);
         Task SaveAsync(Form form);
+        Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId);
     }
 }
