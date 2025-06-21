@@ -1,6 +1,37 @@
+@using Presentation.Shared
+
 <table class="log-table">
-    <thead><tr><th>Log</th></tr></thead>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>User</th>
+            <th>Form</th>
+            <th>Action</th>
+            <th>Details</th>
+        </tr>
+    </thead>
     <tbody>
-        <tr><td>Log entry</td></tr>
+        @if (Logs is null)
+        {
+            <tr><td colspan="5">Loading...</td></tr>
+        }
+        else
+        {
+            @foreach (var log in Logs)
+            {
+                <tr>
+                    <td>@log.Timestamp.ToLocalTime()</td>
+                    <td>@log.UserId</td>
+                    <td>@log.FormId</td>
+                    <td>@log.ActionType</td>
+                    <td>@log.Details</td>
+                </tr>
+            }
+        }
     </tbody>
 </table>
+
+@code {
+    [Parameter]
+    public IReadOnlyList<ActivityLogDto>? Logs { get; set; }
+}

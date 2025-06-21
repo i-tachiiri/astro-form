@@ -1,7 +1,18 @@
 @page "/logs"
+@inject HttpClient Http
+@using Presentation.Shared
 
 <AppShell>
     <Breadcrumb>Logs</Breadcrumb>
     <LogFilterBar />
-    <LogTable />
+    <LogTable Logs="logs" />
 </AppShell>
+
+@code {
+    private List<ActivityLogDto>? logs;
+
+    protected override async Task OnInitializedAsync()
+    {
+        logs = await Http.GetFromJsonAsync<List<ActivityLogDto>>("logs");
+    }
+}

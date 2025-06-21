@@ -13,12 +13,14 @@ public class FormFunctions
     private readonly IFormRepository _repository;
     private readonly FormPublishService _publisher;
     private readonly FormAnswerService _answerService;
+    private readonly ActivityLogService _logService;
 
-    public FormFunctions(IFormRepository repository, FormPublishService publisher, FormAnswerService answerService)
+    public FormFunctions(IFormRepository repository, FormPublishService publisher, FormAnswerService answerService, ActivityLogService logService)
     {
         _repository = repository;
         _publisher = publisher;
         _answerService = answerService;
+        _logService = logService;
     }
 
     [FunctionName("GetFormById")]
@@ -59,6 +61,7 @@ public class FormFunctions
         }
         form.Id = guid;
         await _repository.SaveAsync(form);
+        await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "SaveForm" });
         return new OkObjectResult(form);
     }
 
@@ -90,6 +93,7 @@ public class FormFunctions
         form.Id = guid;
         var path = await _publisher.PublishAsync(form);
         await _repository.SaveAsync(form);
+        await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "PublishForm" });
         return new OkObjectResult(new { path });
     }
 }
