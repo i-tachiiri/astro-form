@@ -1,5 +1,6 @@
 using AstroForm.Application;
 using AstroForm.Domain.Entities;
+using AstroForm.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -10,10 +11,12 @@ namespace AstroForm.Functions;
 public class UserFunctions
 {
     private readonly UserService _service;
+    private readonly IFormRepository _forms;
 
-    public UserFunctions(UserService service)
+    public UserFunctions(UserService service, IFormRepository forms)
     {
         _service = service;
+        _forms = forms;
     }
 
     [FunctionName("RegisterUser")]
@@ -32,6 +35,15 @@ public class UserFunctions
     {
         var update = await req.ReadFromJsonAsync<RoleUpdate>() ?? new RoleUpdate(UserRole.Assistant);
         await _service.UpdateRoleAsync(id, update.Role);
+        return new OkResult();
+    }
+
+    [FunctionName("DeleteUser")]
+    public async Task<IActionResult> DeleteUser(
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "users/{id}")] HttpRequest req,
+        string id)
+    {
+        await _service.DeleteUserAsync(id, _forms);
         return new OkResult();
     }
 

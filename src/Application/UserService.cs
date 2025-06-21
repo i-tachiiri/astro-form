@@ -39,5 +39,11 @@ namespace AstroForm.Application
             user.UpdatedAt = DateTime.UtcNow;
             await _repository.SaveAsync(user);
         }
+
+        public async Task DeleteUserAsync(string id, IFormRepository forms)
+        {
+            await _repository.DeleteAsync(id);
+            await forms.DeleteFormsByUserAsync(id);
+        }
     }
 }

@@ -28,6 +28,16 @@ namespace AstroForm.Application
             return path;
         }
 
+        public Task DeletePreviewAsync(Guid formId)
+        {
+            var path = Path.Combine(_previewDir, $"{formId}.html");
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            return Task.CompletedTask;
+        }
+
         public async Task<string> PublishAsync(Form form)
         {
             Directory.CreateDirectory(_publicDir);
@@ -64,15 +74,29 @@ namespace AstroForm.Application
                 sb.AppendLine($"<p>{WebUtility.HtmlEncode(form.Description)}</p>");
             }
             sb.AppendLine("<form>");
+            var hasPlace = false;
             foreach (var item in form.FormItems.OrderBy(i => i.DisplayOrder))
             {
                 var label = WebUtility.HtmlEncode(item.Label);
                 var placeholder = WebUtility.HtmlEncode(item.Placeholder ?? string.Empty);
-                sb.AppendLine($"<label>{label}<input name=\"{item.Id}\" placeholder=\"{placeholder}\" /></label><br/>");
+                var type = item.Type switch
+                {
+                    "date" => "date",
+                    "time" => "time",
+                    "place" => "text",
+                    _ => "text"
+                };
+                var cls = item.Type == "place" ? " class=\"place-autocomplete\"" : string.Empty;
+                if (item.Type == "place") hasPlace = true;
+                sb.AppendLine($"<label>{label}<input type=\"{type}\" name=\"{item.Id}\" placeholder=\"{placeholder}\"{cls} /></label><br/>");
             }
             sb.AppendLine("<button type=\"submit\">Submit</button>");
             sb.AppendLine("</form>");
 
+            if (hasPlace)
+            {
+                sb.AppendLine("<script src=\"https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places\"></script>");
+            }
             sb.AppendLine("<script>");
             sb.AppendLine("document.addEventListener('DOMContentLoaded', function () {");
             sb.AppendLine("  fetch('/api/warmup').catch(() => {});");
@@ -85,6 +109,10 @@ namespace AstroForm.Application
             sb.AppendLine("      localStorage.setItem(key, input.value);");
             sb.AppendLine("    });");
             sb.AppendLine("  });");
+            if (hasPlace)
+            {
+                sb.AppendLine("  document.querySelectorAll('.place-autocomplete').forEach(function(el){ new google.maps.places.Autocomplete(el); });");
+            }
             sb.AppendLine("  document.querySelector('form').addEventListener('submit', async function(e) {");
             sb.AppendLine("    e.preventDefault();");
             sb.AppendLine("    var data = { answers: {}, consentGivenAt: new Date().toISOString() };");

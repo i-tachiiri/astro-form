@@ -7,5 +7,6 @@ namespace AstroForm.Domain.Repositories
     {
         Task<User?> GetByIdAsync(string id);
         Task SaveAsync(User user);
+        Task DeleteAsync(string id);
     }
 }

@@ -72,5 +72,19 @@ namespace AstroForm.Tests
             Assert.False(File.Exists(path));
             Assert.Equal(FormStatus.Draft, form.Status);
         }
+
+        [Fact]
+        public async Task DeletePreview_RemovesFile()
+        {
+            var previewDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
+            var service = new FormPublishService("unused", previewDir);
+            var form = CreateSampleForm();
+
+            var path = await service.GeneratePreviewAsync(form);
+            Assert.True(File.Exists(path));
+
+            await service.DeletePreviewAsync(form.Id);
+            Assert.False(File.Exists(path));
+        }
     }
 }

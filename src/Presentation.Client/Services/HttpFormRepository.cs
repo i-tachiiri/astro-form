@@ -46,4 +46,9 @@ public class HttpFormRepository : IFormRepository
     {
         await _http.DeleteAsync($"forms/{formId}/answers/{submissionId}");
     }
+
+    public async Task DeleteFormsByUserAsync(string userId)
+    {
+        await _http.DeleteAsync($"users/{userId}/forms");
+    }
 }

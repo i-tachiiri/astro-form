@@ -56,5 +56,14 @@ namespace AstroForm.Infra
             }
             return Task.CompletedTask;
         }
+
+        public Task DeleteFormsByUserAsync(string userId)
+        {
+            foreach (var form in _store.Values.Where(f => f.UserId == userId).ToList())
+            {
+                _store.TryRemove(form.Id, out _);
+            }
+            return Task.CompletedTask;
+        }
     }
 }
