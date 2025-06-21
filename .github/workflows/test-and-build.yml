@@ -22,9 +22,14 @@ jobs:
       - name: Build
         run: dotnet build src/AstroForm.sln --configuration Release --no-restore
       - name: Test
-        run: dotnet test src/AstroForm.sln --configuration Release --collect:"XPlat Code Coverage" --no-build
+        run: dotnet test src/AstroForm.sln --configuration Release --collect:"XPlat Code Coverage" --results-directory TestResults --no-build
       - name: Coverage Check
         run: |
-          RATE=$(grep -oPm1 '(?<=line-rate=")\d+\.\d+' TestResults/*/coverage.cobertura.xml)
+          FILE=$(find TestResults -name coverage.cobertura.xml | head -n 1)
+          if [ -z "$FILE" ]; then
+            echo "Coverage file not found." >&2
+            exit 1
+          fi
+          RATE=$(grep -o 'line-rate="[0-9.]*"' "$FILE" | head -n1 | sed 's/line-rate="//;s/"//')
           echo "Coverage: $RATE"
           awk 'BEGIN{ if('$RATE' < 0.7) exit 1 }'
