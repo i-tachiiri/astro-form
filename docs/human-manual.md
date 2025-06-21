@@ -1,6 +1,6 @@
 下記を実施し、プロジェクトのひな形を作成してください。
-docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
-docs/ci.md を参照し、ymlファイルを配置
+- docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
+- docs/ci.md を参照し、ymlファイルを配置
 docs/development-guideline.md を参照し、Serilogや.editorconfigを設定
 下記を実施し、開発環境を整えて下さい。
 docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
