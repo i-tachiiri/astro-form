@@ -17,6 +17,8 @@
   
 下記を実施し、Azure functionsの実装を行ってください。
 - docs/api-spec.md とdocs/architectures/application-design.md に基づいてAzure functionsのAPIを実装
+
+下記を実施し、画面を完成させて下さい。
 - docs/ui-design.md に記載のある全画面を作成
 - 各画面にdocs/components.md に基づいてコンポーネントを実装
   
