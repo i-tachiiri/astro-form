@@ -1,1 +1,19 @@
-<div class="log-filter-bar">Filter Bar</div>
+<div class="log-filter-bar">
+    <InputText @bind-Value="userId" placeholder="User ID" />
+    <InputText @bind-Value="formId" placeholder="Form ID" />
+    <button @onclick="Apply">Filter</button>
+</div>
+
+@code {
+    [Parameter] public EventCallback<FilterCriteria> OnFilter { get; set; }
+
+    private string? userId;
+    private string? formId;
+
+    private async Task Apply()
+    {
+        await OnFilter.InvokeAsync(new FilterCriteria(userId, formId));
+    }
+
+    public record FilterCriteria(string? UserId, string? FormId);
+}

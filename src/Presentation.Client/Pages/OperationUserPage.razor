@@ -1,0 +1,37 @@
+@page "/ops-user"
+@using AstroForm.Domain.Entities
+@inject HttpClient Http
+
+<AppShell>
+    <Breadcrumb>Ops User Setting</Breadcrumb>
+    <EditForm Model="request" OnValidSubmit="UpdateRole">
+        <InputText @bind-Value="request.Id" placeholder="User ID" />
+        <InputSelect @bind-Value="request.Role">
+            <option value="@UserRole.FortuneTeller">FortuneTeller</option>
+            <option value="@UserRole.Assistant">Assistant</option>
+            <option value="@UserRole.Admin">Admin</option>
+        </InputSelect>
+        <button type="submit">Update</button>
+    </EditForm>
+    @if (!string.IsNullOrEmpty(message))
+    {
+        <p>@message</p>
+    }
+</AppShell>
+
+@code {
+    private RoleRequest request = new();
+    private string? message;
+
+    private async Task UpdateRole()
+    {
+        var res = await Http.PostAsJsonAsync($"users/{request.Id}/role", new { role = request.Role });
+        message = res.IsSuccessStatusCode ? "Updated" : "Failed";
+    }
+
+    private class RoleRequest
+    {
+        public string Id { get; set; } = string.Empty;
+        public UserRole Role { get; set; } = UserRole.Admin;
+    }
+}
