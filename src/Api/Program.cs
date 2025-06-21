@@ -4,6 +4,7 @@ using AstroForm.Domain.Security;
 using AstroForm.Infra;
 using AstroForm.Application;
 using AstroForm.Domain.Services;
+using Microsoft.Azure.Cosmos;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
@@ -26,13 +27,26 @@ builder.Services.AddSingleton<IEncryptionService>(sp =>
     var key = Convert.FromBase64String(base64);
     return new AesEncryptionService(key);
 });
+builder.Services.AddSingleton<CosmosClient>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var conn = cfg["Cosmos:ConnectionString"];
+    return string.IsNullOrEmpty(conn) ? new CosmosClient("https://localhost:8081", "C2y6yDjf5/R+ob0N8A7Cgv30VRr=wtGAzRM2MPms==") : new CosmosClient(conn);
+});
+builder.Services.AddSingleton<CosmosFormRepository>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var db = cfg["Cosmos:Database"] ?? "astroform";
+    return new CosmosFormRepository(sp.GetRequiredService<CosmosClient>(), db);
+});
 builder.Services.AddSingleton<IFormRepository>(sp =>
     new EncryptedFormRepository(
-        sp.GetRequiredService<InMemoryFormRepository>(),
+        sp.GetRequiredService<CosmosFormRepository>(),
         sp.GetRequiredService<IEncryptionService>()));
 builder.Services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 builder.Services.AddSingleton<IEmailService, InMemoryEmailService>();
+builder.Services.AddSingleton<IExternalIdentityService, EntraExternalIdentityService>();
 builder.Services.AddSingleton(sp =>
 {
     var env = sp.GetRequiredService<IHostEnvironment>();
@@ -43,6 +57,7 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddSingleton<FormAnswerService>();
 builder.Services.AddSingleton<ActivityLogService>();
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<GdprService>();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -190,6 +205,12 @@ app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService se
 app.MapDelete("/users/{id}", async (string id, UserService service, IFormRepository forms) =>
 {
     await service.DeleteUserAsync(id, forms);
+    return Results.Ok();
+});
+
+app.MapPost("/gdpr/delete/{id}", (string id, GdprService gdpr) =>
+{
+    gdpr.RequestUserDeletion(id);
     return Results.Ok();
 });
 
