@@ -3,17 +3,21 @@ using System.Linq;
 using System.Threading.Tasks;
 using AstroForm.Domain.Entities;
 using AstroForm.Domain.Services;
+using AppUser = AstroForm.Domain.Entities.User;
+using GraphUser = Microsoft.Graph.Models.User;
 using Azure.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Graph;
+using Microsoft.Graph.Models;
+using Microsoft.Kiota.Abstractions;
 
 namespace AstroForm.Infra;
 
 public class EntraExternalIdentityService : IExternalIdentityService
 {
     private readonly ILogger<EntraExternalIdentityService> _logger;
-    private readonly GraphServiceClient _graph;
+    private readonly GraphServiceClient? _graph;
     private readonly Dictionary<UserRole, string?> _groups;
     public EntraExternalIdentityService(IConfiguration config, ILogger<EntraExternalIdentityService> logger)
     {
@@ -45,13 +49,13 @@ public class EntraExternalIdentityService : IExternalIdentityService
             _logger.LogInformation("Create user {Id} {Email}", id, email);
             return;
         }
-        var user = new User
+        var user = new GraphUser
         {
             Id = id,
             DisplayName = displayName,
             Mail = email
         };
-        await _graph.Users[id].Request().UpdateAsync(user);
+        await _graph.Users[id].PatchAsync(user);
     }
 
     public async Task UpdateUserRoleAsync(string id, UserRole role)
@@ -65,17 +69,17 @@ public class EntraExternalIdentityService : IExternalIdentityService
         {
             try
             {
-                await _graph.Groups[g].Members[id].Reference.Request().DeleteAsync();
+                await _graph.Groups[g].Members[id].Ref.DeleteAsync();
             }
-            catch (ServiceException ex) when (ex.StatusCode == System.Net.HttpStatusCode.NotFound)
+            catch (ApiException ex) when (ex.ResponseStatusCode == (int)System.Net.HttpStatusCode.NotFound)
             {
             }
         }
         var target = _groups.GetValueOrDefault(role);
         if (!string.IsNullOrEmpty(target))
         {
-            await _graph.Groups[target].Members.References.Request()
-                .AddAsync(new DirectoryObject { Id = id });
+            var body = new ReferenceCreate { OdataId = $"https://graph.microsoft.com/v1.0/users/{id}" };
+            await _graph.Groups[target].Members.Ref.PostAsync(body);
         }
     }
 
@@ -86,6 +90,6 @@ public class EntraExternalIdentityService : IExternalIdentityService
             _logger.LogInformation("Delete user {Id}", id);
             return Task.CompletedTask;
         }
-        return _graph.Users[id].Request().DeleteAsync();
+        return _graph.Users[id].DeleteAsync();
     }
 }

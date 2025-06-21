@@ -23,9 +23,13 @@ jobs:
         run: dotnet build src/AstroForm.sln --configuration Release --no-restore
       - name: Test
         run: dotnet test src/AstroForm.sln --configuration Release --collect:"XPlat Code Coverage" --results-directory TestResults --no-build
+      - name: Generate Coverage Report
+        run: |
+          dotnet tool install --global dotnet-reportgenerator-globaltool
+          reportgenerator -reports:TestResults/**/coverage.cobertura.xml -targetdir:CoverageReport -reporttypes:Cobertura
       - name: Coverage Check
         run: |
-          FILE=$(find TestResults -name coverage.cobertura.xml | head -n 1)
+          FILE=CoverageReport/Cobertura.xml
           if [ -z "$FILE" ]; then
             echo "Coverage file not found." >&2
             exit 1

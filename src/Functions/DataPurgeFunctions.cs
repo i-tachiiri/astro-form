@@ -19,7 +19,7 @@ public class DataPurgeFunctions
     }
 
     [FunctionName("PurgeOldSubmissions")]
-    public async Task PurgeOldSubmissions([TimerTrigger("0 0 0 * * *")]TimerInfo timer, ILogger logger)
+    public async Task PurgeOldSubmissions([TimerTrigger("0 0 0 * * *")] TimerInfo timer, ILogger logger)
     {
         var forms = await _repository.GetAllAsync();
         foreach (var form in forms)
