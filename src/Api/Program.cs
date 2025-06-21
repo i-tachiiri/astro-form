@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IFormRepository, InMemoryFormRepository>();
 builder.Services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
+builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 builder.Services.AddSingleton(sp =>
 {
     var env = sp.GetRequiredService<IHostEnvironment>();
@@ -18,6 +19,7 @@ builder.Services.AddSingleton(sp =>
 });
 builder.Services.AddSingleton<FormAnswerService>();
 builder.Services.AddSingleton<ActivityLogService>();
+builder.Services.AddSingleton<UserService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -77,4 +79,17 @@ app.MapGet("/logviewer", async context =>
     await context.Response.SendFileAsync(path);
 });
 
+app.MapPost("/users/register", async (UserRegistration req, UserService service) => {
+    var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email, req.Role);
+    return Results.Ok(user);
+});
+app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) => {
+    await service.UpdateRoleAsync(id, req.Role);
+    return Results.Ok();
+});
+
 app.Run();
+
+record UserRegistration(string Id, string DisplayName, string Email, UserRole Role);
+record RoleUpdate(UserRole Role);
+
