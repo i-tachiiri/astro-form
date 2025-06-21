@@ -20,7 +20,7 @@ public class UserFunctions
     public async Task<IActionResult> RegisterUser(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "users/register")] HttpRequest req)
     {
-        var data = await req.ReadFromJsonAsync<UserRegistration>() ?? new UserRegistration();
+        var data = await req.ReadFromJsonAsync<UserRegistration>() ?? new UserRegistration(string.Empty, string.Empty, string.Empty, DateTime.MinValue);
         var user = await _service.RegisterAsync(data.Id, data.DisplayName, data.Email, data.ConsentGivenAt);
         return new OkObjectResult(user);
     }
@@ -30,7 +30,7 @@ public class UserFunctions
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "users/{id}/role")] HttpRequest req,
         string id)
     {
-        var update = await req.ReadFromJsonAsync<RoleUpdate>() ?? new RoleUpdate();
+        var update = await req.ReadFromJsonAsync<RoleUpdate>() ?? new RoleUpdate(UserRole.Assistant);
         await _service.UpdateRoleAsync(id, update.Role);
         return new OkResult();
     }

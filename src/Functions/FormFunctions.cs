@@ -69,7 +69,7 @@ public class FormFunctions
         string formId,
         string submissionId)
     {
-        var data = await req.ReadFromJsonAsync<EmailRequest>() ?? new EmailRequest();
+        var data = await req.ReadFromJsonAsync<EmailRequest>() ?? new EmailRequest(string.Empty);
         if (!Guid.TryParse(formId, out var fid) || !Guid.TryParse(submissionId, out var sid))
         {
             return new BadRequestResult();

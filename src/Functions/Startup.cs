@@ -5,6 +5,8 @@ using AstroForm.Domain.Services;
 using AstroForm.Infra;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Serilog;
 
 [assembly: FunctionsStartup(typeof(AstroForm.Functions.Startup))]
