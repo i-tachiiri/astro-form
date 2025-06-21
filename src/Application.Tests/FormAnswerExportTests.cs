@@ -16,6 +16,7 @@ namespace AstroForm.Tests
         {
             var repo = new InMemoryFormRepository();
             var email = new InMemoryEmailService();
+            var users = new InMemoryUserRepository();
             var form = new Form { Id = Guid.NewGuid(), Name = "Test", Status = FormStatus.Draft };
             var item = new FormItem { Id = Guid.NewGuid(), FormId = form.Id, Type = "text", Label = "Name", DisplayOrder = 1, IsDefault = true };
             form.FormItems.Add(item);
@@ -28,7 +29,7 @@ namespace AstroForm.Tests
             });
             await repo.SaveAsync(form);
 
-            var service = new FormAnswerService(repo, email);
+            var service = new FormAnswerService(repo, email, users);
             var csv = await service.ExportCsvAsync(form.Id);
 
             Assert.Contains("Name", csv);
@@ -40,6 +41,7 @@ namespace AstroForm.Tests
         {
             var repo = new InMemoryFormRepository();
             var email = new InMemoryEmailService();
+            var users = new InMemoryUserRepository();
             var form = new Form { Id = Guid.NewGuid(), Name = "Test", Status = FormStatus.Draft };
             var item = new FormItem { Id = Guid.NewGuid(), FormId = form.Id, Type = "text", Label = "Name", DisplayOrder = 1, IsDefault = true };
             form.FormItems.Add(item);
@@ -53,7 +55,7 @@ namespace AstroForm.Tests
             form.FormSubmissions.Add(submission);
             await repo.SaveAsync(form);
 
-            var service = new FormAnswerService(repo, email);
+            var service = new FormAnswerService(repo, email, users);
             await service.SendSubmissionEmailAsync(form.Id, submission.Id, "to@example.com");
 
             Assert.Single(email.Messages);

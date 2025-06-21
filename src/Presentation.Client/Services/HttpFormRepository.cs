@@ -32,6 +32,11 @@ public class HttpFormRepository : IFormRepository
         await _http.PostAsJsonAsync($"forms/{form.Id}/save", form);
     }
 
+    public async Task DeleteFormAsync(Guid id)
+    {
+        await _http.DeleteAsync($"forms/{id}");
+    }
+
     public Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId)
     {
         return _http.GetFromJsonAsync<IReadOnlyList<FormSubmission>>($"forms/{formId}/answers")!;

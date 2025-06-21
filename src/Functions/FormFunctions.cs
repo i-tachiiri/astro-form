@@ -103,6 +103,25 @@ public class FormFunctions
         return new OkResult();
     }
 
+    [FunctionName("DeleteForm")]
+    public async Task<IActionResult> DeleteForm(
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "forms/{id}")] HttpRequest req,
+        string id)
+    {
+        if (!Guid.TryParse(id, out var guid))
+        {
+            return new BadRequestResult();
+        }
+        var form = await _repository.GetByIdAsync(guid);
+        if (form is null)
+        {
+            return new NotFoundResult();
+        }
+        await _repository.DeleteFormAsync(guid);
+        await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = guid, ActionType = "DeleteForm" });
+        return new OkResult();
+    }
+
     [FunctionName("SaveForm")]
     public async Task<IActionResult> SaveForm(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "forms/{id}/save")] HttpRequest req,
@@ -149,6 +168,26 @@ public class FormFunctions
         await _repository.SaveAsync(form);
         await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "PublishForm" });
         return new OkObjectResult(new { path });
+    }
+
+    [FunctionName("UnpublishForm")]
+    public async Task<IActionResult> UnpublishForm(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "forms/{id}/draft")] HttpRequest req,
+        string id)
+    {
+        if (!Guid.TryParse(id, out var guid))
+        {
+            return new BadRequestResult();
+        }
+        var form = await _repository.GetByIdAsync(guid);
+        if (form is null)
+        {
+            return new NotFoundResult();
+        }
+        await _publisher.UnpublishAsync(form);
+        await _repository.SaveAsync(form);
+        await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "UnpublishForm" });
+        return new OkObjectResult(form);
     }
 
     [FunctionName("SubmitFormAnswers")]
