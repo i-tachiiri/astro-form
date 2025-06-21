@@ -1,0 +1,9 @@
+{
+  "sdk": {
+    "version": "8.0.411",
+    "rollForward": "latestFeature"
+  },
+  "msbuild-sdks": {
+    "Microsoft.NET.Sdk.Functions": "4.6.0"
+  }
+}
