@@ -2,5 +2,28 @@
 
 <AppShell>
     <Breadcrumb>Published Form</Breadcrumb>
-    <!-- Published form here -->
+    @if (_publishedPath is null)
+    {
+        <button @onclick="Publish">Publish</button>
+    }
+    else
+    {
+        <p>Published at <a href="@_publishedPath" target="_blank">@_publishedPath</a></p>
+    }
 </AppShell>
+
+@code {
+    [Inject] public FormEditorService Service { get; set; } = default!;
+    [Inject] public HttpClient Http { get; set; } = default!;
+
+    private string? _publishedPath;
+
+    private async Task Publish()
+    {
+        var response = await Http.PostAsJsonAsync($"forms/{Service.CurrentForm.Id}/publish", Service.CurrentForm);
+        var result = await response.Content.ReadFromJsonAsync<PublishResponse>();
+        _publishedPath = result?.Path;
+    }
+
+    private record PublishResponse(string Path);
+}

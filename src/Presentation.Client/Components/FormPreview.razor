@@ -1,1 +1,26 @@
-<div class="form-preview">Form Preview Placeholder</div>
+<div class="form-preview">
+    @if (_previewPath is null)
+    {
+        <p>Loading preview...</p>
+    }
+    else
+    {
+        <iframe src="@_previewPath" style="width:100%;height:500px;"></iframe>
+    }
+</div>
+
+@code {
+    [Inject] public FormEditorService Service { get; set; } = default!;
+    [Inject] public HttpClient Http { get; set; } = default!;
+
+    private string? _previewPath;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await Http.PostAsJsonAsync($"forms/{Service.CurrentForm.Id}/preview", Service.CurrentForm);
+        var result = await response.Content.ReadFromJsonAsync<PreviewResponse>();
+        _previewPath = result?.Path;
+    }
+
+    private record PreviewResponse(string Path);
+}
