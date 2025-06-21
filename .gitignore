@@ -1,0 +1,10 @@
+# Build
+bin/
+obj/
+# VS Code
+.vscode/
+# Packages
+packages-microsoft-prod.deb
+act.tar.gz
+# Others
+*.user
