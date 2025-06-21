@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using AstroForm.Domain;
+using AstroForm.Api.Services;
 
 [assembly: FunctionsStartup(typeof(AstroForm.Api.Startup))]
 namespace AstroForm.Api;
@@ -22,5 +23,7 @@ public class Startup : FunctionsStartup
         var key = Convert.FromBase64String(keyBase64);
         var iv = Convert.FromBase64String(ivBase64);
         builder.Services.AddSingleton<IEncryptionService>(_ => new AesEncryptionService(key, iv));
+
+        builder.Services.AddSingleton<IExternalIdUserService, ExternalIdUserService>();
     }
 }
