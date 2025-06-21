@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using AstroForm.Application;
 using AstroForm.Domain.Entities;
@@ -56,6 +57,45 @@ namespace AstroForm.Tests
 
             Assert.Equal(8, service.CurrentForm.FormItems.Count);
             Assert.All(service.CurrentForm.FormItems, i => Assert.True(i.IsDefault));
+        }
+
+        [Fact]
+        public void AddItem_AppendsNewItem()
+        {
+            var repo = new InMemoryFormRepository();
+            using var service = new FormEditorService(repo);
+
+            var item = service.AddItem("text", "new");
+
+            Assert.Contains(item, service.CurrentForm.FormItems);
+            Assert.Equal(9, item.DisplayOrder);
+            Assert.False(item.IsDefault);
+        }
+
+        [Fact]
+        public void RemoveItem_DeletesItem()
+        {
+            var repo = new InMemoryFormRepository();
+            using var service = new FormEditorService(repo);
+
+            var item = service.AddItem("text", "temp");
+            service.RemoveItem(item.Id);
+
+            Assert.DoesNotContain(service.CurrentForm.FormItems, i => i.Id == item.Id);
+        }
+
+        [Fact]
+        public void UpdateItem_ChangesValues()
+        {
+            var repo = new InMemoryFormRepository();
+            using var service = new FormEditorService(repo);
+
+            var item = service.AddItem("text", "old");
+            service.UpdateItem(item.Id, "new", "ph");
+
+            var updated = service.CurrentForm.FormItems.First(i => i.Id == item.Id);
+            Assert.Equal("new", updated.Label);
+            Assert.Equal("ph", updated.Placeholder);
         }
     }
 }
