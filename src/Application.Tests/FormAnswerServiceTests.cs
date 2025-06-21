@@ -17,7 +17,8 @@ namespace AstroForm.Tests
             form.FormSubmissions.Add(new FormSubmission { Id = Guid.NewGuid(), FormId = form.Id, Answers = "ans" });
             await repo.SaveAsync(form);
 
-            var service = new FormAnswerService(repo);
+            var email = new InMemoryEmailService();
+            var service = new FormAnswerService(repo, email);
             var list = await service.GetSubmissionsAsync(form.Id);
 
             Assert.Single(list);

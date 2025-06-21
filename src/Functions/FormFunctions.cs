@@ -1,6 +1,7 @@
 using AstroForm.Application;
 using AstroForm.Domain.Entities;
 using AstroForm.Domain.Repositories;
+using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -47,6 +48,34 @@ public class FormFunctions
         }
         var answers = await _answerService.GetSubmissionsAsync(guid);
         return answers.Count == 0 ? new NotFoundResult() : new OkObjectResult(answers);
+    }
+
+    [FunctionName("ExportFormAnswersCsv")]
+    public async Task<IActionResult> ExportFormAnswersCsv(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "forms/{id}/answers/csv")] HttpRequest req,
+        string id)
+    {
+        if (!Guid.TryParse(id, out var guid))
+        {
+            return new BadRequestResult();
+        }
+        var csv = await _answerService.ExportCsvAsync(guid);
+        return new FileContentResult(Encoding.UTF8.GetBytes(csv), "text/csv") { FileDownloadName = $"{id}.csv" };
+    }
+
+    [FunctionName("SendFormSubmissionEmail")]
+    public async Task<IActionResult> SendFormSubmissionEmail(
+        [HttpTrigger(AuthorizationLevel.Function, "post", Route = "forms/{formId}/answers/{submissionId}/email")] HttpRequest req,
+        string formId,
+        string submissionId)
+    {
+        var data = await req.ReadFromJsonAsync<EmailRequest>() ?? new EmailRequest();
+        if (!Guid.TryParse(formId, out var fid) || !Guid.TryParse(submissionId, out var sid))
+        {
+            return new BadRequestResult();
+        }
+        await _answerService.SendSubmissionEmailAsync(fid, sid, data.To);
+        return new OkResult();
     }
 
     [FunctionName("SaveForm")]
@@ -96,4 +125,6 @@ public class FormFunctions
         await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "PublishForm" });
         return new OkObjectResult(new { path });
     }
+
+    public record EmailRequest(string To);
 }

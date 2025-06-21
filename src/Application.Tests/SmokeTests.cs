@@ -1,5 +1,6 @@
 using AstroForm.Application;
 using AstroForm.Domain.Repositories;
+using AstroForm.Domain.Services;
 using AstroForm.Infra;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -15,6 +16,7 @@ public class SmokeTests
         services.AddSingleton<IFormRepository, InMemoryFormRepository>();
         services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
         services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+        services.AddSingleton<IEmailService, InMemoryEmailService>();
         services.AddSingleton(sp => new FormPublishService("/tmp/public", "/tmp/preview"));
         services.AddSingleton<FormAnswerService>();
         services.AddSingleton<ActivityLogService>();
