@@ -1,2 +1,35 @@
 @page "/answerreview"
-<h1>AnswerReview</h1>
+
+<h1>Answers</h1>
+
+<CsvExportButton />
+
+@if (answers is null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (answers.Count == 0)
+{
+    <p>No answers yet.</p>
+}
+else
+{
+    <ul>
+        @foreach (var a in answers)
+        {
+            <li>@a</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<string>? answers;
+
+    [Inject] private HttpClient Http { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var text = await Http.GetStringAsync("api/answers");
+        answers = text.Split('\n', StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
+}
