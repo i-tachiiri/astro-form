@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Log Viewer</title>
+    <style>
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 4px; }
+    </style>
+</head>
+<body>
+    <h1>Activity Logs</h1>
+    <table id="logTable">
+        <thead>
+            <tr>
+                <th>Timestamp</th>
+                <th>User</th>
+                <th>Form</th>
+                <th>Action</th>
+                <th>Details</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <script>
+        async function loadLogs() {
+            const res = await fetch('/logs');
+            const logs = await res.json();
+            const tbody = document.querySelector('#logTable tbody');
+            tbody.innerHTML = '';
+            logs.forEach(log => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${log.timestamp}</td><td>${log.userId ?? ''}</td><td>${log.formId ?? ''}</td><td>${log.actionType}</td><td>${log.details ?? ''}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+        loadLogs();
+    </script>
+</body>
+</html>
