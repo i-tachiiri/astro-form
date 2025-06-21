@@ -6,7 +6,7 @@
 - **フォーム回答結果**のCSV出力やHTMLメール送信機能が未実装【F:docs/use-cases.md†L13-L14】【F:docs/use-cases.md†L21-L22】
 - **Azure FunctionsのWarm up** 関数が無く、公開フォームからの起動待ち対策が不足【F:docs/use-cases.md†L17-L18】
 - **運用ユーザー設定**やログ管理ページのフィルタ機能が未実装【F:docs/use-cases.md†L24-L27】
-- GDPR対応は暗号化のみで、データ削除や利用者同意取得などが不足【F:docs/requirements.md†L17-L18】
+- GDPR対応として暗号化に加え、利用者同意日時の保存と回答削除APIを実装済み【F:src/Domain/Entities.cs†L37-L43】【F:src/Functions/FormFunctions.cs†L81-L94】
 - インフラはBicepで定義しているが、Azure無料枠の利用制限を検証する仕組みが無い【F:docs/requirements.md†L17-L18】
 
 ## 実装箇所

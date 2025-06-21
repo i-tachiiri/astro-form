@@ -14,7 +14,7 @@ namespace AstroForm.Tests
             var repo = new InMemoryUserRepository();
             var service = new UserService(repo);
 
-            var user = await service.RegisterAsync("u1", "test", "t@example.com");
+            var user = await service.RegisterAsync("u1", "test", "t@example.com", DateTime.UtcNow);
             Assert.Equal(UserRole.FortuneTeller, user.Role);
 
             await service.UpdateRoleAsync("u1", UserRole.Admin);

@@ -36,6 +36,8 @@ namespace AstroForm.Domain.Entities
 
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        [Required]
+        public DateTime ConsentGivenAt { get; set; }
 
         public virtual ICollection<Form> Forms { get; set; } = new List<Form>();
         public virtual ICollection<ActivityLog> ActivityLogs { get; set; } = new List<ActivityLog>();
@@ -114,6 +116,11 @@ namespace AstroForm.Domain.Entities
         public string Answers { get; set; } = string.Empty;
 
         public DateTime SubmittedAt { get; set; }
+
+        [Required]
+        public DateTime ConsentGivenAt { get; set; }
+
+        public DateTime? DeletedAt { get; set; }
 
         public string? SubmitterInfo { get; set; }
 
