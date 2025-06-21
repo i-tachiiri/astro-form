@@ -14,7 +14,7 @@ namespace AstroForm.Application
             _repository = repository;
         }
 
-        public async Task<User> RegisterAsync(string id, string displayName, string email)
+        public async Task<User> RegisterAsync(string id, string displayName, string email, DateTime consentGivenAt)
         {
             var user = new User
             {
@@ -23,7 +23,8 @@ namespace AstroForm.Application
                 Email = email,
                 Role = UserRole.FortuneTeller,
                 CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                UpdatedAt = DateTime.UtcNow,
+                ConsentGivenAt = consentGivenAt
             };
             await _repository.SaveAsync(user);
             return user;

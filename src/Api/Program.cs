@@ -74,6 +74,13 @@ app.MapPost("/forms/{formId}/answers/{submissionId}/email", async (Guid formId, 
     return Results.Ok();
 });
 
+app.MapDelete("/forms/{formId}/answers/{submissionId}", async (Guid formId, Guid submissionId, FormAnswerService service, ActivityLogService logs) =>
+{
+    await service.DeleteSubmissionAsync(formId, submissionId);
+    await logs.AddLogAsync(new ActivityLog { FormId = formId, ActionType = "DeleteSubmission" });
+    return Results.Ok();
+});
+
 app.MapPost("/forms/{id}/save", async (Guid id, Form form, IFormRepository repo, ActivityLogService logs) =>
 {
     form.Id = id;
@@ -113,7 +120,7 @@ app.MapGet("/logviewer", async context =>
 
 app.MapPost("/users/register", async (UserRegistration req, UserService service) =>
 {
-    var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email);
+    var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email, req.ConsentGivenAt);
     return Results.Ok(user);
 });
 app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) =>
@@ -124,7 +131,7 @@ app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService se
 
 app.Run();
 
-record UserRegistration(string Id, string DisplayName, string Email);
+record UserRegistration(string Id, string DisplayName, string Email, DateTime ConsentGivenAt);
 record RoleUpdate(UserRole Role);
 record EmailRequest(string To);
 

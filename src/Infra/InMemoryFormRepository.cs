@@ -32,5 +32,18 @@ namespace AstroForm.Infra
             }
             return Task.FromResult((IReadOnlyList<FormSubmission>)new List<FormSubmission>());
         }
+
+        public Task DeleteSubmissionAsync(Guid formId, Guid submissionId)
+        {
+            if (_store.TryGetValue(formId, out var form))
+            {
+                var sub = form.FormSubmissions.FirstOrDefault(s => s.Id == submissionId);
+                if (sub != null)
+                {
+                    form.FormSubmissions.Remove(sub);
+                }
+            }
+            return Task.CompletedTask;
+        }
     }
 }

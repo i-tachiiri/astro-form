@@ -59,5 +59,10 @@ namespace AstroForm.Infra
             }
             return list;
         }
+
+        public Task DeleteSubmissionAsync(Guid formId, Guid submissionId)
+        {
+            return _inner.DeleteSubmissionAsync(formId, submissionId);
+        }
     }
 }

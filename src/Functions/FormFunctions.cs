@@ -78,6 +78,21 @@ public class FormFunctions
         return new OkResult();
     }
 
+    [FunctionName("DeleteFormSubmission")]
+    public async Task<IActionResult> DeleteFormSubmission(
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "forms/{formId}/answers/{submissionId}")] HttpRequest req,
+        string formId,
+        string submissionId)
+    {
+        if (!Guid.TryParse(formId, out var fid) || !Guid.TryParse(submissionId, out var sid))
+        {
+            return new BadRequestResult();
+        }
+        await _answerService.DeleteSubmissionAsync(fid, sid);
+        await _logService.AddLogAsync(new ActivityLog { FormId = fid, ActionType = "DeleteSubmission" });
+        return new OkResult();
+    }
+
     [FunctionName("SaveForm")]
     public async Task<IActionResult> SaveForm(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "forms/{id}/save")] HttpRequest req,

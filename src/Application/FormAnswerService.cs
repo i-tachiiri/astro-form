@@ -68,6 +68,11 @@ namespace AstroForm.Application
             }
         }
 
+        public Task DeleteSubmissionAsync(Guid formId, Guid submissionId)
+        {
+            return _repository.DeleteSubmissionAsync(formId, submissionId);
+        }
+
         public async Task SendSubmissionEmailAsync(Guid formId, Guid submissionId, string to)
         {
             var form = await _repository.GetByIdAsync(formId) ?? throw new InvalidOperationException("Form not found");

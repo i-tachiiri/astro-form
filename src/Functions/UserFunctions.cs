@@ -21,7 +21,7 @@ public class UserFunctions
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "users/register")] HttpRequest req)
     {
         var data = await req.ReadFromJsonAsync<UserRegistration>() ?? new UserRegistration();
-        var user = await _service.RegisterAsync(data.Id, data.DisplayName, data.Email);
+        var user = await _service.RegisterAsync(data.Id, data.DisplayName, data.Email, data.ConsentGivenAt);
         return new OkObjectResult(user);
     }
 
@@ -35,6 +35,6 @@ public class UserFunctions
         return new OkResult();
     }
 
-    public record UserRegistration(string Id, string DisplayName, string Email);
+    public record UserRegistration(string Id, string DisplayName, string Email, DateTime ConsentGivenAt);
     public record RoleUpdate(UserRole Role);
 }
