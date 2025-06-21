@@ -15,7 +15,7 @@ public class EntraExternalIdentityServiceTests
         var config = new ConfigurationBuilder().Build();
         var logger = NullLogger<EntraExternalIdentityService>.Instance;
         var service = new EntraExternalIdentityService(config, logger);
-        await service.CreateUserAsync("id","name","e@example.com");
+        await service.CreateUserAsync("id", "name", "e@example.com");
         await service.UpdateUserRoleAsync("id", UserRole.Admin);
         await service.DeleteUserAsync("id");
     }
