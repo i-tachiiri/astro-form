@@ -3,8 +3,8 @@
         @foreach (var item in Service.CurrentForm.FormItems.OrderBy(i => i.DisplayOrder))
         {
             <li>
-                <input value="@item.Label" @onchange="e => OnEdit(item.Id, e.Value?.ToString() ?? string.Empty, item.Placeholder)" />
-                <input value="@item.Placeholder" @onchange="e => OnEdit(item.Id, item.Label, e.Value?.ToString())" />
+                <input value="@item.Label" @onchange="e => OnEdit(item.Id, e.Value?.ToString() ?? string.Empty, item.Placeholder)" @onblur="() => OnBlur()" />
+                <input value="@item.Placeholder" @onchange="e => OnEdit(item.Id, item.Label, e.Value?.ToString())" @onblur="() => OnBlur()" />
                 @if (!item.IsDefault)
                 {
                     <button @onclick="() => Remove(item.Id)">Delete</button>
@@ -31,5 +31,10 @@
     private void OnEdit(Guid id, string label, string? placeholder)
     {
         Service.UpdateItem(id, label, placeholder);
+    }
+
+    private async Task OnBlur()
+    {
+        await Service.BlurAsync();
     }
 }
