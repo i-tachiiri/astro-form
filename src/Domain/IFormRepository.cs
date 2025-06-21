@@ -12,5 +12,6 @@ namespace AstroForm.Domain.Repositories
         Task DeleteFormAsync(Guid id);
         Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId);
         Task DeleteSubmissionAsync(Guid formId, Guid submissionId);
+        Task DeleteFormsByUserAsync(string userId);
     }
 }

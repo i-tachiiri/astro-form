@@ -138,9 +138,9 @@ namespace AstroForm.Application
                 new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "email", Label = "メールアドレス", DisplayOrder = 3, IsDefault = true },
                 new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "date", Label = "生まれた年・月・日", DisplayOrder = 4, IsDefault = true },
                 new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "time", Label = "生まれた時・分", DisplayOrder = 5, IsDefault = true },
-                new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "text", Label = "生まれた国", DisplayOrder = 6, IsDefault = true },
-                new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "text", Label = "生まれた都道府県", DisplayOrder = 7, IsDefault = true },
-                new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "text", Label = "生まれた市町村", DisplayOrder = 8, IsDefault = true }
+                new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "place", Label = "生まれた国", DisplayOrder = 6, IsDefault = true },
+                new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "place", Label = "生まれた都道府県", DisplayOrder = 7, IsDefault = true },
+                new FormItem { Id = Guid.NewGuid(), FormId = formId, Type = "place", Label = "生まれた市町村", DisplayOrder = 8, IsDefault = true }
             };
         }
 

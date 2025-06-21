@@ -20,5 +20,11 @@ namespace AstroForm.Infra
             _store[user.Id] = user;
             return Task.CompletedTask;
         }
+
+        public Task DeleteAsync(string id)
+        {
+            _store.TryRemove(id, out _);
+            return Task.CompletedTask;
+        }
     }
 }

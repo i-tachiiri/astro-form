@@ -85,5 +85,10 @@ namespace AstroForm.Infra
         {
             return _inner.DeleteFormAsync(id);
         }
+
+        public Task DeleteFormsByUserAsync(string userId)
+        {
+            return _inner.DeleteFormsByUserAsync(userId);
+        }
     }
 }

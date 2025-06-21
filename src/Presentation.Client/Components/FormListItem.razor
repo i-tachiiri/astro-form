@@ -1,8 +1,44 @@
 @using AstroForm.Domain.Entities
 
-<li class="form-list-item">@Form.Name</li>
+<li class="form-list-item">
+    <span>@Form.Name (@Form.Status)</span>
+    <a href="/form-editor?id=@Form.Id">Edit</a>
+    <button @onclick="Delete">Delete</button>
+    @if (Form.Status == FormStatus.Draft)
+    {
+        <button @onclick="Publish">Publish</button>
+    }
+    else
+    {
+        <button @onclick="Unpublish">Unpublish</button>
+    }
+</li>
 
 @code {
     [Parameter]
     public Form Form { get; set; } = default!;
+    [Parameter]
+    public EventCallback OnChanged { get; set; }
+
+    [Inject] public HttpClient Http { get; set; } = default!;
+
+    private async Task Publish()
+    {
+        await Http.PostAsJsonAsync($"forms/{Form.Id}/publish", Form);
+        Form.Status = FormStatus.Published;
+        await OnChanged.InvokeAsync();
+    }
+
+    private async Task Unpublish()
+    {
+        await Http.PostAsync($"forms/{Form.Id}/draft", null);
+        Form.Status = FormStatus.Draft;
+        await OnChanged.InvokeAsync();
+    }
+
+    private async Task Delete()
+    {
+        await Http.DeleteAsync($"forms/{Form.Id}");
+        await OnChanged.InvokeAsync();
+    }
 }

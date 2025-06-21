@@ -124,6 +124,12 @@ app.MapPost("/forms/{id}/preview", async (Guid id, Form form, FormPublishService
     return Results.Ok(new { path });
 });
 
+app.MapDelete("/forms/{id}/preview", async (Guid id, FormPublishService publisher) =>
+{
+    await publisher.DeletePreviewAsync(id);
+    return Results.Ok();
+});
+
 app.MapPost("/forms/{id}/publish", async (Guid id, Form form, IFormRepository repo, FormPublishService publisher, ActivityLogService logs) =>
 {
     form.Id = id;
@@ -178,6 +184,18 @@ app.MapPost("/users/register", async (UserRegistration req, ClaimsPrincipal prin
 app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) =>
 {
     await service.UpdateRoleAsync(id, req.Role);
+    return Results.Ok();
+});
+
+app.MapDelete("/users/{id}", async (string id, UserService service, IFormRepository forms) =>
+{
+    await service.DeleteUserAsync(id, forms);
+    return Results.Ok();
+});
+
+app.MapDelete("/users/{id}/forms", async (string id, IFormRepository forms) =>
+{
+    await forms.DeleteFormsByUserAsync(id);
     return Results.Ok();
 });
 

@@ -1,1 +1,27 @@
-<input placeholder="Enter location" class="place-autocomplete" />
+@implements IAsyncDisposable
+<input id="@_id" placeholder="Enter location" @bind="Value" class="place-autocomplete" />
+
+@code {
+    [Parameter]
+    public string? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<string?> ValueChanged { get; set; }
+
+    [Inject] IJSRuntime JS { get; set; } = default!;
+
+    private readonly string _id = $"p_{Guid.NewGuid()}";
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("initPlaceAutocomplete", _id);
+        }
+    }
+
+    public ValueTask DisposeAsync()
+    {
+        return JS.InvokeVoidAsync("disposePlaceAutocomplete", _id);
+    }
+}

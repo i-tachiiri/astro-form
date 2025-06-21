@@ -1,3 +1,4 @@
+@implements IAsyncDisposable
 <div class="form-preview">
     @if (_previewPath is null)
     {
@@ -20,6 +21,14 @@
         var response = await Http.PostAsJsonAsync($"forms/{Service.CurrentForm.Id}/preview", Service.CurrentForm);
         var result = await response.Content.ReadFromJsonAsync<PreviewResponse>();
         _previewPath = result?.Path;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_previewPath is not null)
+        {
+            await Http.DeleteAsync($"forms/{Service.CurrentForm.Id}/preview");
+        }
     }
 
     private record PreviewResponse(string Path);

@@ -1,1 +1,9 @@
-<input type="date" class="date-picker" />
+<input type="date" @bind="Value" class="date-picker" />
+
+@code {
+    [Parameter]
+    public DateTime? Value { get; set; }
+
+    [Parameter]
+    public EventCallback<DateTime?> ValueChanged { get; set; }
+}

@@ -153,6 +153,19 @@ public class FormFunctions
         return new OkObjectResult(new { path });
     }
 
+    [FunctionName("DeletePreview")]
+    public async Task<IActionResult> DeletePreview(
+        [HttpTrigger(AuthorizationLevel.Function, "delete", Route = "forms/{id}/preview")] HttpRequest req,
+        string id)
+    {
+        if (!Guid.TryParse(id, out var guid))
+        {
+            return new BadRequestResult();
+        }
+        await _publisher.DeletePreviewAsync(guid);
+        return new OkResult();
+    }
+
     [FunctionName("PublishForm")]
     public async Task<IActionResult> PublishForm(
         [HttpTrigger(AuthorizationLevel.Function, "post", Route = "forms/{id}/publish")] HttpRequest req,
