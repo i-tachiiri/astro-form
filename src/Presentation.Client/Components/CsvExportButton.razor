@@ -1,1 +1,14 @@
-<div>CsvExportButton component</div>
+<button class="btn btn-primary" @onclick="Download">Export CSV</button>
+
+@using Microsoft.JSInterop
+@code {
+    [Inject] private HttpClient Http { get; set; } = default!;
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task Download()
+    {
+        using var stream = await Http.GetStreamAsync("api/answers/csv");
+        using var streamRef = new DotNetStreamReference(stream);
+        await JS.InvokeVoidAsync("downloadFileFromStream", "answers.csv", streamRef);
+    }
+}
