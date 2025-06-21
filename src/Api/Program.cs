@@ -14,6 +14,7 @@ builder.Services.AddSingleton(sp =>
     var previewDir = Path.Combine(env.ContentRootPath, "preview");
     return new FormPublishService(publicDir, previewDir);
 });
+builder.Services.AddSingleton<FormAnswerService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -30,6 +31,12 @@ app.MapGet("/forms/{id}", async (Guid id, IFormRepository repo) =>
 {
     var form = await repo.GetByIdAsync(id);
     return form is null ? Results.NotFound() : Results.Ok(form);
+});
+
+app.MapGet("/forms/{id}/answers", async (Guid id, FormAnswerService service) =>
+{
+    var answers = await service.GetSubmissionsAsync(id);
+    return answers.Count == 0 ? Results.NotFound() : Results.Ok(answers);
 });
 
 app.MapPost("/forms/{id}/save", async (Guid id, Form form, IFormRepository repo) =>
