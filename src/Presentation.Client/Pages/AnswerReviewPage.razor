@@ -1,6 +1,47 @@
 @page "/answer-review"
 
+@using AstroForm.Domain.Entities
+@inject HttpClient Http
+
 <AppShell>
     <Breadcrumb>Answer Review</Breadcrumb>
-    <!-- Answer table here -->
+    <p><a href="forms/@FormId/answers/csv">Download CSV</a></p>
+    <table class="answer-table">
+        <thead>
+            <tr><th>Submitted</th><th>Actions</th></tr>
+        </thead>
+        <tbody>
+            @if (_answers is null)
+            {
+                <tr><td colspan="2">Loading...</td></tr>
+            }
+            else
+            {
+                @foreach (var a in _answers)
+                {
+                    <tr>
+                        <td>@a.SubmittedAt.ToLocalTime()</td>
+                        <td><button @onclick="() => SendEmail(a.Id)">Send Email</button></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 </AppShell>
+
+@code {
+    [Parameter]
+    public Guid FormId { get; set; }
+
+    private List<FormSubmission>? _answers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _answers = await Http.GetFromJsonAsync<List<FormSubmission>>($"forms/{FormId}/answers");
+    }
+
+    private async Task SendEmail(Guid id)
+    {
+        await Http.PostAsJsonAsync($"forms/{FormId}/answers/{id}/email", new { To = "test@example.com" });
+    }
+}

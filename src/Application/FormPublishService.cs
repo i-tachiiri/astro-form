@@ -60,6 +60,7 @@ namespace AstroForm.Application
 
             sb.AppendLine("<script>");
             sb.AppendLine("document.addEventListener('DOMContentLoaded', function () {");
+            sb.AppendLine("  fetch('/api/warmup').catch(() => {});");
             sb.AppendLine($"  var formId = '{form.Id}';");
             sb.AppendLine("  document.querySelectorAll('form input').forEach(function(input) {");
             sb.AppendLine("    var key = 'form-' + formId + '-' + input.name;");
@@ -68,6 +69,13 @@ namespace AstroForm.Application
             sb.AppendLine("    input.addEventListener('blur', function () {");
             sb.AppendLine("      localStorage.setItem(key, input.value);");
             sb.AppendLine("    });");
+            sb.AppendLine("  });");
+            sb.AppendLine("  document.querySelector('form').addEventListener('submit', async function(e) {");
+            sb.AppendLine("    e.preventDefault();");
+            sb.AppendLine("    var data = { answers: {}, consentGivenAt: new Date().toISOString() };");
+            sb.AppendLine("    document.querySelectorAll('form input').forEach(function(input){ data.answers[input.name]=input.value; });");
+            sb.AppendLine($"    await fetch('/api/forms/{form.Id}/answers', {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify(data) }});");
+            sb.AppendLine("    window.location.href = '/post-submit';");
             sb.AppendLine("  });");
             sb.AppendLine("});");
             sb.AppendLine("</script>");

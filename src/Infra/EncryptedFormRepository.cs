@@ -35,6 +35,22 @@ namespace AstroForm.Infra
             return form;
         }
 
+        public async Task<IReadOnlyList<Form>> GetAllAsync()
+        {
+            var list = await _inner.GetAllAsync();
+            foreach (var form in list)
+            {
+                foreach (var sub in form.FormSubmissions)
+                {
+                    if (!string.IsNullOrEmpty(sub.Answers))
+                    {
+                        sub.Answers = _encryption.Decrypt(sub.Answers);
+                    }
+                }
+            }
+            return list;
+        }
+
         public async Task SaveAsync(Form form)
         {
             foreach (var sub in form.FormSubmissions)

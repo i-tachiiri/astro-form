@@ -1,1 +1,8 @@
-<li class="form-list-item">Sample Form</li>
+@using AstroForm.Domain.Entities
+
+<li class="form-list-item">@Form.Name</li>
+
+@code {
+    [Parameter]
+    public Form Form { get; set; } = default!;
+}

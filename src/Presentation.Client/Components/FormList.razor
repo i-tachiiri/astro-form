@@ -1,6 +1,28 @@
+@using AstroForm.Domain.Entities
+
 <div class="form-list">
     <ul>
-        <FormListItem />
-        <FormListItem />
+        @if (_forms is null)
+        {
+            <li>Loading...</li>
+        }
+        else
+        {
+            @foreach (var form in _forms)
+            {
+                <FormListItem Form="form" />
+            }
+        }
     </ul>
 </div>
+
+@code {
+    [Inject] public IFormRepository Repository { get; set; } = default!;
+
+    private IReadOnlyList<Form>? _forms;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _forms = await Repository.GetAllAsync();
+    }
+}
