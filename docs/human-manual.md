@@ -1,16 +1,15 @@
 下記を実施し、プロジェクトのひな形を作成してください。
 - docs/architectures/application-design.md を参照し、各プロジェクトとサンプル UnitTest を追加する
-- docs/ci.md を参照し、ymlファイルを配置
-  - `ci-error.md` を参照し、CI時のエラーが発生しないか確認
 - docs/development-guideline.md を参照し、Serilogや.editorconfigを設定
   - UnitTestにはSmokeTestを追加し、起動時の例外が出ないかチェックできるようにしてください
-  - Blazorのプロジェクトにはiconやfaviconのpngが含まれるが、バイナリがあるとPRが作成できないのでSVG等に置き換えて対応
-    
+  - Blazorのプロジェクトにはiconやfaviconのpngが含まれるが、バイナリがあるとPRが作成できないのでSVG等に置き換えて対応 
   
 下記を実施し、開発環境を整えて下さい。
 - docs/azure-setup.md を参照し、Bicep/ARM でサービスを定義
 - docs/docker-setup.md を参照し、docker関連のセットアップを行う
-  
+- docs/ci.md を参照し、ymlファイルを配置
+  - `ci-error.md` を参照し、CI時のエラーが発生しないか確認     
+
 下記を実施し、データ設計を行ってください。
 - docs/data-design.md を参照し、スキーマを作成
 - docs/entities.md を参照し、ドメイン層を設計する
