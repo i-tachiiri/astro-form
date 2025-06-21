@@ -22,6 +22,21 @@ namespace AstroForm.Application
             _email = email;
         }
 
+        public async Task SubmitAsync(Guid formId, Dictionary<string, string> answers, DateTime consentGivenAt)
+        {
+            var form = await _repository.GetByIdAsync(formId) ?? throw new InvalidOperationException("Form not found");
+            var submission = new FormSubmission
+            {
+                Id = Guid.NewGuid(),
+                FormId = formId,
+                Answers = JsonSerializer.Serialize(answers),
+                SubmittedAt = DateTime.UtcNow,
+                ConsentGivenAt = consentGivenAt
+            };
+            form.FormSubmissions.Add(submission);
+            await _repository.SaveAsync(form);
+        }
+
         public async Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId)
         {
             var form = await _repository.GetByIdAsync(formId);

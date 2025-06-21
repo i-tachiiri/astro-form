@@ -2,6 +2,8 @@ using AstroForm.Application;
 using AstroForm.Domain.Entities;
 using AstroForm.Domain.Repositories;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -22,6 +24,14 @@ public class FormFunctions
         _publisher = publisher;
         _answerService = answerService;
         _logService = logService;
+    }
+
+    [FunctionName("GetForms")]
+    public async Task<IActionResult> GetForms(
+        [HttpTrigger(AuthorizationLevel.Function, "get", Route = "forms")] HttpRequest req)
+    {
+        var list = await _repository.GetAllAsync();
+        return new OkObjectResult(list.Select(f => new { f.Id, f.Name }));
     }
 
     [FunctionName("GetFormById")]
@@ -140,6 +150,22 @@ public class FormFunctions
         await _logService.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "PublishForm" });
         return new OkObjectResult(new { path });
     }
+
+    [FunctionName("SubmitFormAnswers")]
+    public async Task<IActionResult> SubmitFormAnswers(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "forms/{id}/answers")] HttpRequest req,
+        string id)
+    {
+        if (!Guid.TryParse(id, out var guid))
+        {
+            return new BadRequestResult();
+        }
+        var data = await req.ReadFromJsonAsync<SubmissionRequest>() ?? new SubmissionRequest(new(), DateTime.UtcNow);
+        await _answerService.SubmitAsync(guid, data.Answers, data.ConsentGivenAt);
+        return new OkResult();
+    }
+
+    public record SubmissionRequest(Dictionary<string, string> Answers, DateTime ConsentGivenAt);
 
     public record EmailRequest(string To);
 }

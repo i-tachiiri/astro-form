@@ -5,9 +5,12 @@ using AstroForm.Infra;
 using AstroForm.Application;
 using AstroForm.Domain.Services;
 using System.IO;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Security.Claims;
+using Presentation.Shared;
+using System.Collections.Generic;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,6 +66,12 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapGet("/forms", async (IFormRepository repo) =>
+{
+    var forms = await repo.GetAllAsync();
+    return Results.Ok(forms.Select(f => new FormDto(f.Id, f.Name)));
+});
+
 app.MapGet("/forms/{id}", async (Guid id, IFormRepository repo) =>
 {
     var form = await repo.GetByIdAsync(id);
@@ -91,6 +100,12 @@ app.MapDelete("/forms/{formId}/answers/{submissionId}", async (Guid formId, Guid
 {
     await service.DeleteSubmissionAsync(formId, submissionId);
     await logs.AddLogAsync(new ActivityLog { FormId = formId, ActionType = "DeleteSubmission" });
+    return Results.Ok();
+});
+
+app.MapPost("/forms/{id}/answers", async (Guid id, SubmissionRequest req, FormAnswerService service) =>
+{
+    await service.SubmitAsync(id, req.Answers, req.ConsentGivenAt);
     return Results.Ok();
 });
 
@@ -151,6 +166,7 @@ app.Run();
 
 record UserRegistration(string Id, string DisplayName, string Email, DateTime ConsentGivenAt);
 record RoleUpdate(UserRole Role);
+record SubmissionRequest(Dictionary<string, string> Answers, DateTime ConsentGivenAt);
 record EmailRequest(string To);
 
 public partial class Program { }

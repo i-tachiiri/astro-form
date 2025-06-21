@@ -12,6 +12,11 @@ namespace AstroForm.Infra
     {
         private readonly ConcurrentDictionary<Guid, Form> _store = new();
 
+        public Task<IReadOnlyList<Form>> GetAllAsync()
+        {
+            return Task.FromResult((IReadOnlyList<Form>)_store.Values.ToList());
+        }
+
         public Task<Form?> GetByIdAsync(Guid id)
         {
             _store.TryGetValue(id, out var form);
