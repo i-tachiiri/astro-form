@@ -14,14 +14,14 @@ namespace AstroForm.Application
             _repository = repository;
         }
 
-        public async Task<User> RegisterAsync(string id, string displayName, string email, UserRole role)
+        public async Task<User> RegisterAsync(string id, string displayName, string email)
         {
             var user = new User
             {
                 Id = id,
                 DisplayName = displayName,
                 Email = email,
-                Role = role,
+                Role = UserRole.FortuneTeller,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };

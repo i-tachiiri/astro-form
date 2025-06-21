@@ -99,7 +99,7 @@ app.MapGet("/logviewer", async context =>
 
 app.MapPost("/users/register", async (UserRegistration req, UserService service) =>
 {
-    var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email, req.Role);
+    var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email);
     return Results.Ok(user);
 });
 app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) =>
@@ -110,7 +110,7 @@ app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService se
 
 app.Run();
 
-record UserRegistration(string Id, string DisplayName, string Email, UserRole Role);
+record UserRegistration(string Id, string DisplayName, string Email);
 record RoleUpdate(UserRole Role);
 
 public partial class Program { }

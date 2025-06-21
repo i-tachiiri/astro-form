@@ -1,7 +1,7 @@
 # このドキュメントには実装の指示に対し、よりスムーズに実装を行うための改善点を記載してください。
 
 ## 実装との差異
-- Microsoft Entra External ID を用いた **ユーザー登録** の仕組みが未実装【F:docs/use-cases.md†L5-L7】【F:docs/requirements.md†L14-L18】
+- Microsoft Entra External ID を用いた **ユーザー登録** の仕組みを実装済み【F:src/Application/UserService.cs†L17-L28】【F:src/Functions/UserFunctions.cs†L18-L39】
 - **フォーム回答項目**の追加・削除・編集 UI が存在せず、`FormEditorService` にも追加/削除メソッドがない【F:docs/use-cases.md†L7-L7】
 - **フォーム回答結果**のCSV出力やHTMLメール送信機能が未実装【F:docs/use-cases.md†L13-L14】【F:docs/use-cases.md†L21-L22】
 - **Azure FunctionsのWarm up** 関数が無く、公開フォームからの起動待ち対策が不足【F:docs/use-cases.md†L17-L18】
