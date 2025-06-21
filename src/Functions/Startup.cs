@@ -1,6 +1,7 @@
 using AstroForm.Application;
 using AstroForm.Domain.Repositories;
 using AstroForm.Domain.Security;
+using AstroForm.Domain.Services;
 using AstroForm.Infra;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,6 +30,7 @@ public class Startup : FunctionsStartup
                 sp.GetRequiredService<IEncryptionService>()));
         services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
         services.AddSingleton<IUserRepository, InMemoryUserRepository>();
+        services.AddSingleton<IEmailService, InMemoryEmailService>();
         services.AddSingleton<FormPublishService>();
         services.AddSingleton<FormAnswerService>();
         services.AddSingleton<ActivityLogService>();
