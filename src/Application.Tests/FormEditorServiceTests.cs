@@ -97,5 +97,31 @@ namespace AstroForm.Tests
             Assert.Equal("new", updated.Label);
             Assert.Equal("ph", updated.Placeholder);
         }
+
+        [Fact]
+        public async Task UpdateNavigationText_SavesValue()
+        {
+            var repo = new InMemoryFormRepository();
+            using var service = new FormEditorService(repo);
+
+            service.UpdateNavigationText("next");
+            await service.SaveAsync();
+
+            var saved = await repo.GetByIdAsync(service.CurrentForm.Id);
+            Assert.Equal("next", saved?.NavigationText);
+        }
+
+        [Fact]
+        public async Task UpdateThankYouPageUrl_SavesValue()
+        {
+            var repo = new InMemoryFormRepository();
+            using var service = new FormEditorService(repo);
+
+            service.UpdateThankYouPageUrl("https://example.com/thanks");
+            await service.SaveAsync();
+
+            var saved = await repo.GetByIdAsync(service.CurrentForm.Id);
+            Assert.Equal("https://example.com/thanks", saved?.ThankYouPageUrl);
+        }
     }
 }

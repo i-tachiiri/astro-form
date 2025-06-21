@@ -15,11 +15,13 @@ namespace AstroForm.Application
     {
         private readonly IFormRepository _repository;
         private readonly IEmailService _email;
+        private readonly IUserRepository _users;
 
-        public FormAnswerService(IFormRepository repository, IEmailService email)
+        public FormAnswerService(IFormRepository repository, IEmailService email, IUserRepository users)
         {
             _repository = repository;
             _email = email;
+            _users = users;
         }
 
         public async Task SubmitAsync(Guid formId, Dictionary<string, string> answers, DateTime consentGivenAt)
@@ -35,6 +37,11 @@ namespace AstroForm.Application
             };
             form.FormSubmissions.Add(submission);
             await _repository.SaveAsync(form);
+            var user = await _users.GetByIdAsync(form.UserId);
+            if (user != null)
+            {
+                await SendSubmissionEmailAsync(formId, submission.Id, user.Email);
+            }
         }
 
         public async Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId)
@@ -86,6 +93,18 @@ namespace AstroForm.Application
         public Task DeleteSubmissionAsync(Guid formId, Guid submissionId)
         {
             return _repository.DeleteSubmissionAsync(formId, submissionId);
+        }
+
+        public async Task PurgeOldSubmissionsAsync(Guid formId, TimeSpan retention)
+        {
+            var form = await _repository.GetByIdAsync(formId) ?? throw new InvalidOperationException("Form not found");
+            var threshold = DateTime.UtcNow - retention;
+            var toRemove = form.FormSubmissions.Where(s => s.SubmittedAt < threshold).ToList();
+            foreach (var sub in toRemove)
+            {
+                form.FormSubmissions.Remove(sub);
+            }
+            await _repository.SaveAsync(form);
         }
 
         public async Task SendSubmissionEmailAsync(Guid formId, Guid submissionId, string to)

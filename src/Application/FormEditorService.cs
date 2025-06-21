@@ -55,6 +55,18 @@ namespace AstroForm.Application
             RestartTimer();
         }
 
+        public void UpdateNavigationText(string? text)
+        {
+            CurrentForm.NavigationText = text;
+            RestartTimer();
+        }
+
+        public void UpdateThankYouPageUrl(string? url)
+        {
+            CurrentForm.ThankYouPageUrl = url;
+            RestartTimer();
+        }
+
         public FormItem AddItem(string type, string label, string? placeholder = null)
         {
             var item = new FormItem

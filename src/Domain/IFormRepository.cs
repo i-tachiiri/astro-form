@@ -9,6 +9,7 @@ namespace AstroForm.Domain.Repositories
         Task<IReadOnlyList<Form>> GetAllAsync();
         Task<Form?> GetByIdAsync(Guid id);
         Task SaveAsync(Form form);
+        Task DeleteFormAsync(Guid id);
         Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId);
         Task DeleteSubmissionAsync(Guid formId, Guid submissionId);
     }

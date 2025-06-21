@@ -133,6 +133,25 @@ app.MapPost("/forms/{id}/publish", async (Guid id, Form form, IFormRepository re
     return Results.Ok(new { path });
 });
 
+app.MapPost("/forms/{id}/draft", async (Guid id, IFormRepository repo, FormPublishService publisher, ActivityLogService logs) =>
+{
+    var form = await repo.GetByIdAsync(id);
+    if (form is null) return Results.NotFound();
+    await publisher.UnpublishAsync(form);
+    await repo.SaveAsync(form);
+    await logs.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = form.Id, ActionType = "UnpublishForm" });
+    return Results.Ok(form);
+});
+
+app.MapDelete("/forms/{id}", async (Guid id, IFormRepository repo, ActivityLogService logs) =>
+{
+    var form = await repo.GetByIdAsync(id);
+    if (form is null) return Results.NotFound();
+    await repo.DeleteFormAsync(id);
+    await logs.AddLogAsync(new ActivityLog { UserId = form.UserId, FormId = id, ActionType = "DeleteForm" });
+    return Results.Ok();
+});
+
 app.MapGet("/logs", async (string? userId, Guid? formId, ActivityLogService service) =>
 {
     var logs = await service.GetLogsAsync(userId, formId);

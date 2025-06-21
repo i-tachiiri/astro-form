@@ -29,6 +29,12 @@ namespace AstroForm.Infra
             return Task.CompletedTask;
         }
 
+        public Task DeleteFormAsync(Guid id)
+        {
+            _store.TryRemove(id, out _);
+            return Task.CompletedTask;
+        }
+
         public Task<IReadOnlyList<FormSubmission>> GetSubmissionsAsync(Guid formId)
         {
             if (_store.TryGetValue(formId, out var form))

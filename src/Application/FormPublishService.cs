@@ -38,12 +38,27 @@ namespace AstroForm.Application
             return path;
         }
 
+        public Task UnpublishAsync(Form form)
+        {
+            var path = Path.Combine(_publicDir, $"{form.Id}.html");
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+            form.Status = FormStatus.Draft;
+            return Task.CompletedTask;
+        }
+
         private static string BuildHtml(Form form)
         {
             var sb = new StringBuilder();
             sb.AppendLine("<!DOCTYPE html>");
             sb.AppendLine("<html><body>");
             sb.AppendLine($"<h1>{WebUtility.HtmlEncode(form.Name)}</h1>");
+            if (!string.IsNullOrWhiteSpace(form.NavigationText))
+            {
+                sb.AppendLine($"<nav>{WebUtility.HtmlEncode(form.NavigationText)}</nav>");
+            }
             if (!string.IsNullOrWhiteSpace(form.Description))
             {
                 sb.AppendLine($"<p>{WebUtility.HtmlEncode(form.Description)}</p>");
@@ -75,7 +90,8 @@ namespace AstroForm.Application
             sb.AppendLine("    var data = { answers: {}, consentGivenAt: new Date().toISOString() };");
             sb.AppendLine("    document.querySelectorAll('form input').forEach(function(input){ data.answers[input.name]=input.value; });");
             sb.AppendLine($"    await fetch('/api/forms/{form.Id}/answers', {{ method: 'POST', headers: {{ 'Content-Type': 'application/json' }}, body: JSON.stringify(data) }});");
-            sb.AppendLine("    window.location.href = '/post-submit';");
+            var thanks = string.IsNullOrWhiteSpace(form.ThankYouPageUrl) ? "/post-submit" : form.ThankYouPageUrl;
+            sb.AppendLine($"    window.location.href = '{WebUtility.HtmlEncode(thanks)}';");
             sb.AppendLine("  });");
             sb.AppendLine("});");
             sb.AppendLine("</script>");
