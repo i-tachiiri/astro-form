@@ -3,10 +3,12 @@ using AstroForm.Domain.Repositories;
 using AstroForm.Infra;
 using AstroForm.Application;
 using System.IO;
+using Microsoft.AspNetCore.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<IFormRepository, InMemoryFormRepository>();
+builder.Services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
 builder.Services.AddSingleton(sp =>
 {
     var env = sp.GetRequiredService<IHostEnvironment>();
@@ -15,6 +17,7 @@ builder.Services.AddSingleton(sp =>
     return new FormPublishService(publicDir, previewDir);
 });
 builder.Services.AddSingleton<FormAnswerService>();
+builder.Services.AddSingleton<ActivityLogService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -59,6 +62,19 @@ app.MapPost("/forms/{id}/publish", async (Guid id, Form form, IFormRepository re
     var path = await publisher.PublishAsync(form);
     await repo.SaveAsync(form);
     return Results.Ok(new { path });
+});
+
+app.MapGet("/logs", async (string? userId, Guid? formId, ActivityLogService service) =>
+{
+    var logs = await service.GetLogsAsync(userId, formId);
+    return Results.Ok(logs);
+});
+
+app.MapGet("/logviewer", async context =>
+{
+    var env = context.RequestServices.GetRequiredService<IHostEnvironment>();
+    var path = Path.Combine(env.ContentRootPath, "LogViewer.html");
+    await context.Response.SendFileAsync(path);
 });
 
 app.Run();
