@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
 using Timer = System.Timers.Timer;
 using AstroForm.Domain.Entities;
 using AstroForm.Domain.Repositories;
@@ -51,6 +52,51 @@ namespace AstroForm.Application
         public void UpdateDescription(string description)
         {
             CurrentForm.Description = description;
+            RestartTimer();
+        }
+
+        public FormItem AddItem(string type, string label, string? placeholder = null)
+        {
+            var item = new FormItem
+            {
+                Id = Guid.NewGuid(),
+                FormId = CurrentForm.Id,
+                Type = type,
+                Label = label,
+                Placeholder = placeholder,
+                DisplayOrder = CurrentForm.FormItems.Count + 1,
+                IsDefault = false
+            };
+            CurrentForm.FormItems.Add(item);
+            RestartTimer();
+            return item;
+        }
+
+        public void RemoveItem(Guid itemId)
+        {
+            var item = CurrentForm.FormItems.FirstOrDefault(i => i.Id == itemId);
+            if (item == null || item.IsDefault)
+            {
+                return;
+            }
+            CurrentForm.FormItems.Remove(item);
+            var order = 1;
+            foreach (var i in CurrentForm.FormItems.OrderBy(i => i.DisplayOrder))
+            {
+                i.DisplayOrder = order++;
+            }
+            RestartTimer();
+        }
+
+        public void UpdateItem(Guid itemId, string label, string? placeholder = null)
+        {
+            var item = CurrentForm.FormItems.FirstOrDefault(i => i.Id == itemId);
+            if (item == null)
+            {
+                return;
+            }
+            item.Label = label;
+            item.Placeholder = placeholder;
             RestartTimer();
         }
 

@@ -1,1 +1,35 @@
-<div class="form-editor">Form Editor Placeholder</div>
+<div class="form-editor">
+    <ul>
+        @foreach (var item in Service.CurrentForm.FormItems.OrderBy(i => i.DisplayOrder))
+        {
+            <li>
+                <input value="@item.Label" @onchange="e => OnEdit(item.Id, e.Value?.ToString() ?? string.Empty, item.Placeholder)" />
+                <input value="@item.Placeholder" @onchange="e => OnEdit(item.Id, item.Label, e.Value?.ToString())" />
+                @if (!item.IsDefault)
+                {
+                    <button @onclick="() => Remove(item.Id)">Delete</button>
+                }
+            </li>
+        }
+    </ul>
+    <button @onclick="Add">Add Item</button>
+</div>
+
+@code {
+    [Inject] public FormEditorService Service { get; set; } = default!;
+
+    private void Add()
+    {
+        Service.AddItem("text", "New Item");
+    }
+
+    private void Remove(Guid id)
+    {
+        Service.RemoveItem(id);
+    }
+
+    private void OnEdit(Guid id, string label, string? placeholder)
+    {
+        Service.UpdateItem(id, label, placeholder);
+    }
+}
