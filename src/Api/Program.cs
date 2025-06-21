@@ -4,8 +4,12 @@ using AstroForm.Infra;
 using AstroForm.Application;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((ctx, lc) =>
+    lc.ReadFrom.Configuration(ctx.Configuration));
 
 builder.Services.AddSingleton<IFormRepository, InMemoryFormRepository>();
 builder.Services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
@@ -79,11 +83,13 @@ app.MapGet("/logviewer", async context =>
     await context.Response.SendFileAsync(path);
 });
 
-app.MapPost("/users/register", async (UserRegistration req, UserService service) => {
+app.MapPost("/users/register", async (UserRegistration req, UserService service) =>
+{
     var user = await service.RegisterAsync(req.Id, req.DisplayName, req.Email, req.Role);
     return Results.Ok(user);
 });
-app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) => {
+app.MapPost("/users/{id}/role", async (string id, RoleUpdate req, UserService service) =>
+{
     await service.UpdateRoleAsync(id, req.Role);
     return Results.Ok();
 });
@@ -92,4 +98,6 @@ app.Run();
 
 record UserRegistration(string Id, string DisplayName, string Email, UserRole Role);
 record RoleUpdate(UserRole Role);
+
+public partial class Program { }
 

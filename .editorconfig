@@ -1,0 +1,13 @@
+root = true
+
+[*.cs]
+indent_style = space
+indent_size = 4
+charset = utf-8
+
+csharp_new_line_before_open_brace = all
+
+# treat warnings as errors
+warn_as_error = true
+dotnet_diagnostic.CA1303.severity = error
+

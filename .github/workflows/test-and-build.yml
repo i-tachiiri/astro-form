@@ -1,0 +1,30 @@
+name: test and build
+
+on:
+  push:
+    branches: [main, develop, feature/**]
+  pull_request:
+    branches: [main, develop, feature/**]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - name: Restore
+        run: dotnet restore src/AstroForm.sln
+      - name: Format Check
+        run: dotnet format src/AstroForm.sln --verify-no-changes
+      - name: Build
+        run: dotnet build src/AstroForm.sln --configuration Release --no-restore
+      - name: Test
+        run: dotnet test src/AstroForm.sln --configuration Release --collect:"XPlat Code Coverage" --no-build
+      - name: Coverage Check
+        run: |
+          RATE=$(grep -oPm1 '(?<=line-rate=")\d+\.\d+' TestResults/*/coverage.cobertura.xml)
+          echo "Coverage: $RATE"
+          awk 'BEGIN{ if('$RATE' < 0.7) exit 1 }'
