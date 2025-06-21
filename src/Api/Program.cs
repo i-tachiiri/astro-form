@@ -1,5 +1,6 @@
 using AstroForm.Domain.Entities;
 using AstroForm.Domain.Repositories;
+using AstroForm.Domain.Security;
 using AstroForm.Infra;
 using AstroForm.Application;
 using System.IO;
@@ -11,7 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) =>
     lc.ReadFrom.Configuration(ctx.Configuration));
 
-builder.Services.AddSingleton<IFormRepository, InMemoryFormRepository>();
+builder.Services.AddSingleton<InMemoryFormRepository>();
+builder.Services.AddSingleton<IEncryptionService>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var base64 = cfg["EncryptionKey"] ?? throw new InvalidOperationException("EncryptionKey not configured");
+    var key = Convert.FromBase64String(base64);
+    return new AesEncryptionService(key);
+});
+builder.Services.AddSingleton<IFormRepository>(sp =>
+    new EncryptedFormRepository(
+        sp.GetRequiredService<InMemoryFormRepository>(),
+        sp.GetRequiredService<IEncryptionService>()));
 builder.Services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
 builder.Services.AddSingleton(sp =>
