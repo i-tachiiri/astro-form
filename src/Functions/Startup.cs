@@ -45,7 +45,14 @@ public class Startup : FunctionsStartup
                 sp.GetRequiredService<IEncryptionService>()));
         services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
         services.AddSingleton<IUserRepository, InMemoryUserRepository>();
-        services.AddSingleton<IEmailService, InMemoryEmailService>();
+        services.AddSingleton<IEmailService>(sp =>
+        {
+            var cfg = sp.GetRequiredService<IConfiguration>();
+            var host = cfg["Smtp:Host"];
+            return string.IsNullOrEmpty(host)
+                ? new InMemoryEmailService()
+                : new SmtpEmailService(cfg);
+        });
         services.AddSingleton<IExternalIdentityService, EntraExternalIdentityService>();
         services.AddSingleton<FormPublishService>();
         services.AddSingleton<FormAnswerService>();
