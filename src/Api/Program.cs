@@ -45,7 +45,14 @@ builder.Services.AddSingleton<IFormRepository>(sp =>
         sp.GetRequiredService<IEncryptionService>()));
 builder.Services.AddSingleton<IActivityLogRepository, InMemoryActivityLogRepository>();
 builder.Services.AddSingleton<IUserRepository, InMemoryUserRepository>();
-builder.Services.AddSingleton<IEmailService, InMemoryEmailService>();
+builder.Services.AddSingleton<IEmailService>(sp =>
+{
+    var cfg = sp.GetRequiredService<IConfiguration>();
+    var host = cfg["Smtp:Host"];
+    return string.IsNullOrEmpty(host)
+        ? new InMemoryEmailService()
+        : new SmtpEmailService(cfg);
+});
 builder.Services.AddSingleton<IExternalIdentityService, EntraExternalIdentityService>();
 builder.Services.AddSingleton(sp =>
 {
@@ -65,7 +72,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.Authority = builder.Configuration["AzureAd:Authority"];
         options.Audience = builder.Configuration["AzureAd:ClientId"];
     });
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("OperationsOnly", p =>
+        p.RequireRole(UserRole.Admin.ToString()));
+});
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -177,14 +188,14 @@ app.MapGet("/logs", async (string? userId, Guid? formId, ActivityLogService serv
 {
     var logs = await service.GetLogsAsync(userId, formId);
     return Results.Ok(logs);
-});
+}).RequireAuthorization("OperationsOnly");
 
 app.MapGet("/logviewer", async context =>
 {
     var env = context.RequestServices.GetRequiredService<IHostEnvironment>();
     var path = Path.Combine(env.ContentRootPath, "LogViewer.html");
     await context.Response.SendFileAsync(path);
-});
+}).RequireAuthorization("OperationsOnly");
 
 app.MapPost("/users/register", async (UserRegistration req, ClaimsPrincipal principal, UserService service) =>
 {
