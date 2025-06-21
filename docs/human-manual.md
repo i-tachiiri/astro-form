@@ -13,6 +13,7 @@
 下記を実施し、データ設計を行ってください。
 - docs/data-design.md を参照し、スキーマを作成
 - docs/entities.md を参照し、ドメイン層を設計する
+- docs/security.md を参照し、データの扱いにおいて必要な実装があれば行ってください
   
 下記を実施し、Azure functionsの実装を行ってください。
 - docs/api-spec.md とdocs/architectures/application-design.md に基づいてAzure functionsのAPIを実装
