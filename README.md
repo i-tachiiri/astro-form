@@ -33,6 +33,7 @@
 | `docker-setup.md`                        | Docker / Azurite / ローカル開発コンテナ構築手順。                       |
 | `azure-setup.md`                         | Azure リソース（Cosmos DB, Blob, Functions, Key Vault等）の作成手順。 |
 | `security.md`                            | 認証（EasyAuthなど）、認可、暗号化方式（例：AES256+Key Vault）、セキュリティ設計の全般。 |
+| `user-registration.md`                   | Microsoft Entra External ID を用いたユーザー登録フローとロール管理の手順。 |
 | `development-guideline.md`               | コーディング規約（.editorconfig）、ログ（Serilog）、構成指針。                |
 | `development-flow.md`                    | **最初に読むべき**プロジェクト進行・レビュー・実装・テスト・デプロイなどの**開発フロー全体**。                 |
 | `ai-review.md`                           | AIによるコードレビューや改善提案の記録・注釈（AIペアコーディング向け）。                   |
