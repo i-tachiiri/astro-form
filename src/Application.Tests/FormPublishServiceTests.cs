@@ -42,6 +42,7 @@ namespace AstroForm.Tests
             Assert.True(File.Exists(path));
             var html = await File.ReadAllTextAsync(path);
             Assert.Contains("Test", html);
+            Assert.Contains("localStorage.setItem", html);
         }
 
         [Fact]

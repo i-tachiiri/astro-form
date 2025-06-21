@@ -57,6 +57,21 @@ namespace AstroForm.Application
             }
             sb.AppendLine("<button type=\"submit\">Submit</button>");
             sb.AppendLine("</form>");
+
+            sb.AppendLine("<script>");
+            sb.AppendLine("document.addEventListener('DOMContentLoaded', function () {");
+            sb.AppendLine($"  var formId = '{form.Id}';");
+            sb.AppendLine("  document.querySelectorAll('form input').forEach(function(input) {");
+            sb.AppendLine("    var key = 'form-' + formId + '-' + input.name;");
+            sb.AppendLine("    var saved = localStorage.getItem(key);");
+            sb.AppendLine("    if (saved) { input.value = saved; }");
+            sb.AppendLine("    input.addEventListener('blur', function () {");
+            sb.AppendLine("      localStorage.setItem(key, input.value);");
+            sb.AppendLine("    });");
+            sb.AppendLine("  });");
+            sb.AppendLine("});");
+            sb.AppendLine("</script>");
+
             sb.AppendLine("</body></html>");
             return sb.ToString();
         }
