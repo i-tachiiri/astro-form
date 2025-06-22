@@ -26,11 +26,6 @@
 - システム管理者が**運用ユーザー設定**をする
 - **ログ管理ページ**を開く
 
-### 開発担当
-- Githubのdevelopブランチに変更をPR&マージ
-- CI/CDで検証環境へ自動デプロイ
-- 問題なければmainブランチへPR&マージし、同じく本番環境へ自動デプロイ
-
 ## 用語
 - **ユーザー登録** : Microsoft Entra External IDを利用し、IDを登録してもらう事 
 - **フォーム情報** : 一意のID、フォーム名、フォーム説明文、ナビゲーションテキスト、回答後ページ
@@ -49,3 +44,161 @@
 - **入力データの一時保存** : `blur`イベントで、ローカルストレージに各プロパティのIDと入力内容をセットで保存する事。再度ページを開いた際に、各項目に値を自動入力する。
 - **運用ユーザー設定** : システム管理者がMicrosoft Entra External IDで運用担当のロールを付与する事
 
+## スキーマ
+
+```yaml
+# ユーザー情報です。
+container: user
+document:
+  "id": "..."  # sub
+  "sub": "..."
+  "email": "user@example.com"
+  "display_name": "伊藤"
+  "registered_at": "2024-06-22T10:00:00Z"
+  "role": "teller"
+
+# フォームのメタ情報です。
+container: form
+document:
+  id : "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  form_id: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  name : "フォーム名"
+  description : "占い用のフォームです"
+  next_page_url : "/thank-you.html"
+  created_at :  "2024-01-01T12:00:00Z"
+  updated_at :  "2024-01-01T12:00:00Z"
+  published: false
+
+container:
+
+# ユーザー別のデフォルトのフォーム項目です。  
+container: default_properties
+sub: "..."
+properties:
+  first_name:
+    id: "..."
+    type: text
+    label: "名字"
+    required: true
+    order: 1
+    tooltip: "全角で入力してください"
+    visible: true
+    editable: true
+
+  last_name:
+    id: "..."
+    type: text
+    label: "名前"
+    required: true
+    order: 2
+    tooltip: "姓に続く名前を入力してください"
+    visible: true
+    editable: true
+
+  mail_address:
+    id: "..."
+    type: mail
+    label: "メールアドレス"
+    required: true
+    order: 3
+    tooltip: "有効なメールアドレスを入力してください"
+    visible: true
+    editable: true
+    validation_preset: email
+
+  birth_date:
+    id: "..."
+    type: date
+    label: "生年月日"
+    required: true
+    order: 4
+    tooltip: "カレンダーから選択してください"
+    visible: true
+    editable: true
+
+  birth_time:
+    id: "..."
+    type: date
+    label: "出生時刻"
+    required: true
+    order: 5
+    tooltip: "不明な場合は省略できます"
+    visible: true
+    editable: true
+
+  birth_place:
+    id: "..."
+    type: place
+    label: "生まれた場所"
+    required: true
+    order: 6
+    tooltip: "市区町村まで入力してください（例：東京都港区）"
+    visible: true
+    editable: true
+
+  accept_policy:
+    id: "..."
+    type: checkbox
+    label: "プライバシーポリシーへの同意"
+    link: "https://exampla.com"
+    required: true
+    order: 7
+    tooltip: "チェックを入れないと送信できません"
+    visible: true
+    editable: false
+
+# ユーザー別のカスタムのフォーム項目です。  
+container: custom_properties
+document:
+  text:
+    id: "..."
+    type: text
+    label: ""
+    link: ""
+    required: false
+    order: 0
+    tooltip: ""
+    visible: true
+    editable: true  
+  date:
+    id: "..."
+    type: date
+    label: ""
+    link: ""
+    required: false
+    order: 0
+    tooltip: ""
+    visible: true
+    editable: true  
+  time:
+    id: "..."
+    type: time
+    label: ""
+    link: ""
+    required: false
+    order: 0
+    tooltip: ""
+    visible: true
+    editable: true    
+  place:
+    id: "..."
+    type: place
+    label: ""
+    link: ""
+    required: false
+    order: 0
+    tooltip: ""
+    visible: true
+    editable: true    
+  
+  checkbox:
+    id: "..."
+    type: checkbox
+    label: ""
+    link: ""
+    required: false
+    order: 0
+    tooltip: ""
+    visible: true
+    editable: true    
+```
